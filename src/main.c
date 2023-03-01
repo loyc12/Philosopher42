@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 14:40:48 by vjean             #+#    #+#             */
-/*   Updated: 2023/03/01 14:40:32 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/01 14:42:05 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,6 @@ int	main(void) //int ac, char **av)
 
 	exit_status = philosopher();
 
-	free_null((void **)&g_meta);
+	free_null(ADRS g_meta);
 	return (exit_status);
 }
