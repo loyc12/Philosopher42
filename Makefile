@@ -66,7 +66,7 @@ MD		=	mkdir -p
 INCLUDE =	-I include
 
 # Program and directory names
-NAME	=	minishell
+NAME	=	philosopher
 SRCDIR	=	src/
 OBJDIR	=	bin/
 TSTDIR	=	tests/
@@ -76,14 +76,14 @@ FILES	=	main \
 			freeer \
 
 # Libraries (.a files) to include for compilation
-LIBFT	=	./libft/libft.a
+LIBFT	=
 LIBRL	=
 
 SRCS	=	$(addprefix $(SRCDIR), $(addsuffix .c, $(FILES)))
 OBJS	=	$(addprefix $(OBJDIR), $(addsuffix .o, $(FILES)))
 
 # Default command to call when using make run or make leaks
-CMD		=	./minishell
+CMD		=	./philosopher
 
 #------------------------------------------------------------------------------#
 #                                   TARGETS                                    #
