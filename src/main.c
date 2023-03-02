@@ -6,14 +6,11 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 14:40:48 by vjean             #+#    #+#             */
-/*   Updated: 2023/03/01 14:46:59 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/02 09:26:15 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher.h"
-
-//our global var
-t_meta	*g_meta;
 
 //takes a pointer's adress and frees whatever is there, setting it to NULL after
 void	free_null(void **ptr)
@@ -23,27 +20,31 @@ void	free_null(void **ptr)
 }
 
 //initialises g_meta
-void	init_meta(void)
+t_meta	*init_meta(void)
 {
-	g_meta = calloc(1, sizeof(t_meta));
+	t_meta	*m;
+
+	m = calloc(1, sizeof(t_meta));
+
+	return (m);
 }
 
 //main function loop
-int	philosopher(void)
+int	philosopher(t_meta *m)
 {
-	free_null((void **)&g_meta);
 	return (0);
 }
 
 //entrypoint function
 int	main(void) //int ac, char **av)
 {
-	int	exit_status;
+	t_meta	*m;
+	int		exit_status;
 
-	init_meta();
+	m = init_meta();
 
-	exit_status = philosopher();
+	exit_status = philosopher(m);
 
-	free_null(ADRS g_meta);
+	free_null(ADRS m);
 	return (exit_status);
 }

@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:56:01 by llord             #+#    #+#             */
-/*   Updated: 2023/03/01 14:41:54 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/02 09:25:04 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 // ======== LIBRARIES ======== //
 
-# include "../libft/libft.h"
 # include <stdio.h>
 
 // ======== ERROR MESSAGES ======== //
@@ -46,10 +45,6 @@ typedef struct s_meta
 {
 	int		state;
 }			t_meta;
-
-// ======== GLOBAL VAR ======== //
-
-t_meta		*g_meta;
 
 // ======== FUNCTIONS ======== //
 
