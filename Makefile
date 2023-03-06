@@ -73,7 +73,9 @@ TSTDIR	=	tests/
 
 # File names (including their subdirectory if needed)
 FILES	=	main \
-			freeer \
+			killers \
+			utilities \
+			initializers \
 
 # Libraries (.a files) to include for compilation
 LIBFT	=
@@ -83,7 +85,7 @@ SRCS	=	$(addprefix $(SRCDIR), $(addsuffix .c, $(FILES)))
 OBJS	=	$(addprefix $(OBJDIR), $(addsuffix .o, $(FILES)))
 
 # Default command to call when using make run or make leaks
-CMD		=	./philosopher
+CMD		=	./philosopher 10 100 100 100
 
 #------------------------------------------------------------------------------#
 #                                   TARGETS                                    #
@@ -97,7 +99,6 @@ ldirs:
 
 $(NAME): $(OBJS)
 	$(HIDE) $(START)
-	$(HIDE) cd libft && make && cd ..
 	$(HIDE) $(CC) $(MODE) $(CFLAGS) $(INCLUDE) $(LIBFT) -o $@ $^ $(LIBRL)
 	@echo "$(GREEN)Files compiled$(DEF_COLOR)"
 
@@ -116,7 +117,6 @@ clean:
 fclear: fclean
 fclean: clean
 	$(HIDE) $(RM) $(OBJDIR)
-	$(HIDE) cd libft && make fclean && cd ..
 	@echo "$(MAGENTA)Object directory cleaned$(DEF_COLOR)"
 	$(HIDE) $(RM) $(NAME)
 	@echo "$(RED)Executable cleaned$(DEF_COLOR)"

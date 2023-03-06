@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 14:40:48 by vjean             #+#    #+#             */
-/*   Updated: 2023/03/06 15:03:30 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/06 15:30:44 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	throw_error(char *error)
 
 	len = 0;
 	while (error[len])
-	len++;
+		len++;
 	write(2, &error, len);
 	write(2, "\n", 1);
 	return (EXIT_FAILURE);
@@ -41,7 +41,7 @@ int	ft_atoi(const char *str)
 	number = 0;
 
 	while ('0' <= str[i] && str[i] <= '9')
-		number == (number *= 10) + (str[i++] - '0');
+		number = (number * 10) + (str[i++] - '0');
 	if (!str[i])
 		return (number);
 	throw_error(ERR_NUM);
@@ -63,5 +63,5 @@ long long	time_dif(t_meta *m)
 
 	gettimeofday(&t, NULL);
 
-	return (get_time() - (t.tv_usec / 1000)); //returns time dif in ms
+	return (m->start_time - (t.tv_usec / 1000)); //returns time dif in ms
 }

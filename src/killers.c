@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 13:00:02 by llord             #+#    #+#             */
-/*   Updated: 2023/03/06 14:57:51 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/06 15:18:33 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	kill_threads(t_meta *m)
 	i = -1;
 	while (++i < m->philo_count)
 	{
-		pthread_join(&m->p_threads[i], NULL);
+		pthread_join(m->p_threads[i], NULL);
 	}
 }
 
@@ -53,6 +53,6 @@ void	kill_mutex(t_meta *m)
 	i = -1;
 	while (++i < m->philo_count)
 	{
-		pthread_mutex_destroy(&(m->forks[i]));
+		pthread_mutex_destroy(&(m->forks[i]->f_mutex));
 	}
 }

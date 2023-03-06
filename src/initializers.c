@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 14:40:48 by vjean             #+#    #+#             */
-/*   Updated: 2023/03/06 14:57:02 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/06 15:55:58 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 void	init_forks(t_meta *m)
 {
 	int	i;
+
+	printf("init_forks start\n"); //DEBUG
 
 	i = -1;
 	m->forks = calloc(m->philo_count, sizeof(t_fork *));
@@ -30,6 +32,8 @@ void	init_forks(t_meta *m)
 			return ;
 		}
 	}
+
+	printf("init_forks end\n"); //DEBUG
 }
 
 //initializes the philosopher structs
@@ -38,17 +42,23 @@ void	init_philos(t_meta *m)
 	t_philo	*p;
 	int		i;
 
+	printf("init_philos start\n"); //DEBUG
+
 	i = -1;
 	m->philos = calloc(m->philo_count, sizeof(t_philo *));
+	m->p_threads = calloc(m->philo_count, sizeof(pthread_t *));
 	while (++i < m->philo_count)
 	{
 		m->philos[i] = calloc(1, sizeof(t_philo));
+		m->p_threads[i] = calloc(m->philo_count, sizeof(pthread_t));
 		p = m->philos[i];
-		p->philo_id = i;
 		p->m = m;
+		p->philo_id = i;
 		p->right_fork = m->forks[i];
 		p->left_fork = m->forks[(i + 1) % m->philo_count];
 	}
+
+	printf("init_philos end\n"); //DEBUG
 }
 
 //creates the philosophers' threads
@@ -57,23 +67,27 @@ void	init_threads(t_meta *m)
 	t_philo	*p;
 	int		i;
 
+	printf("init_threads start\n"); //DEBUG
+
 	i = -1;
 	while (++i < m->philo_count)
 	{
 		p = m->philos[i];
-		if (pthread_create(&m->p_threads[i], NULL, philosopher, &m->philos[i]))
+		if (pthread_create(m->p_threads[i], NULL, philosopher, m->philos[i]))
 		{
 			throw_error(ERR_THREAD);
 			m->state = MSTATE_ERROR;
 			return ;
 		}
 	}
+
+	printf("init_threads end\n"); //DEBUG
 }
 
 //initialises g_meta and its sub structs/things
 int	init_meta(t_meta *m, char **av)
 {
-	m = calloc(1, sizeof(t_meta));
+	printf("init_meta start\n"); //DEBUG
 
 	m->philo_count = ft_atoi(av[1]);
 	m->time_death = ft_atoi(av[2]);
@@ -89,7 +103,6 @@ int	init_meta(t_meta *m, char **av)
 		if (m->state > MSTATE_ERROR)
 			return (EXIT_SUCCESS);
 	}
-	free_all(m);
 
 	return (EXIT_FAILURE);
 }

@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:56:01 by llord             #+#    #+#             */
-/*   Updated: 2023/03/06 15:02:25 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/06 15:50:20 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <pthread.h>
-# include <semaphore.h>
+# include <sys/time.h>
 
 // ======== DEFINITIONS ======== //
 
@@ -85,7 +85,7 @@ typedef struct s_meta
 	int			time_sleep;		//in ms
 	int			meal_limit;		//optional argument, ends program when reached by all philosophers
 
-	pthread_t	*p_threads;
+	pthread_t	**p_threads;
 
 	t_fork		**forks;
 	t_philo		**philos;
