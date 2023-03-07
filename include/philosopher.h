@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:56:01 by llord             #+#    #+#             */
-/*   Updated: 2023/03/06 15:50:20 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/07 14:53:24 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,17 +25,23 @@
 
 # define ERR_ARG	"Input Error : Invalid argument count"
 # define ERR_NUM	"Input Error : Non-digit input are invalid"
+# define ERR_P_NB	"Input Error : Cannot seat this many philosophers"
 # define ERR_INIT	"Process Error : Initialization failure"
-# define ERR_MUT	"Process Error : Mutex failure"
 # define ERR_THREAD	"Process Error : Thread failure"
+# define ERR_MUT	"Process Error : Mutex failure"
+# define ERR_ACT	"Value Error : Unknown action selected"
 
-# define ACT_TAKE	"has taken a fork";
-# define ACT_EAT	"is eating";
-# define ACT_SLEEP	"is sleeping";
-# define ACT_THINK	"is thinking";
-# define ACT_DIE	"died";
+# define ACT_BORN	"has been born"
+# define ACT_TAKE	"has taken a fork"
+# define ACT_EAT	"is eating"
+# define ACT_SLEEP	"is sleeping"
+# define ACT_THINK	"is thinking"
+# define ACT_DIE	"died"
 
 # define ADRS		(void **)&
+
+# define THREAD_W	(int)5 //wait between thread starts (in us)
+# define PHILO_M	(int)1000 //max number of philosophers
 
 // ======== ENUM STATES ======== //
 
@@ -50,9 +56,10 @@ enum e_mstate
 enum e_pstate
 {
 	PSTATE_DEAD		= -1,
-	PSTATE_SLEEPING	= 0,
-	PSTATE_THINKING	= 1,
-	PSTATE_EATING	= 2,
+	PSTATE_STARTING	= 0,
+	PSTATE_SLEEPING	= 1,
+	PSTATE_THINKING	= 2,
+	PSTATE_EATING	= 3,
 };
 
 // ======== STRUCTS ======== //
@@ -74,6 +81,7 @@ typedef struct s_philo
 
 	int			philo_id;
 	int			meal_count;
+	int			state;
 
 }			t_philo;
 
@@ -107,7 +115,7 @@ void		kill_mutex(t_meta *m);
 
 //from utilities
 int			throw_error(char *error);
-void		print_action(int time, int philo_id, char *action);
+void		print_action(long long time, int philo_id, char *action);
 int			ft_atoi(const char *str);
 
 //from initializers
@@ -117,5 +125,8 @@ void		init_threads(t_meta *m);
 int			init_meta(t_meta *m, char **av);
 long long	get_time(void);
 long long	time_dif(t_meta *m);
+
+//from acter
+void	do_action(t_philo *p, int new_state);
 
 #endif

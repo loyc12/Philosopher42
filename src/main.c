@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 14:40:48 by vjean             #+#    #+#             */
-/*   Updated: 2023/03/06 15:57:31 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/07 14:51:22 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,16 @@
 //threaded function (READ ABOUT THREADS)
 void	*philosopher(void *_p)
 {
-	t_meta	*m;
 	t_philo	*p;
 
 	p = (t_philo *)_p;
-	m = p->m;
 
-	printf("launched thread #%i\n", p->philo_id); //DEBUG
+	//print_action(time_dif(m), p->philo_id, ACT_BORN); //DEBUG
+
+	if ((p->philo_id % 2) == 0 && p->philo_id != p->m->philo_count - 1) //only starts eating if it certain to have forks
+		do_action(p, PSTATE_EATING);
+	else
+		do_action(p, PSTATE_SLEEPING);
 
 	return (NULL);
 }
@@ -43,9 +46,6 @@ void	wait_death(t_meta *m)
 int	main_loop(t_meta *m)
 {
 	printf("main_loop start\n"); //DEBUG
-
-	m->state = MSTATE_RUNING;
-	m->start_time = get_time();
 
 	init_threads(m);
 

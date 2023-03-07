@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 14:40:48 by vjean             #+#    #+#             */
-/*   Updated: 2023/03/06 15:30:44 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/07 14:21:37 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ int	throw_error(char *error)
 }
 
 //prints a given action (from DEFINE)
-void	print_action(int time, int philo_id, char *action)
+void	print_action(long long time, int philo_id, char *action)
 {
-	printf("%i : %i %s", time, philo_id, action);
+	printf("%lli : %i %s\n", time, philo_id, action);
 }
 
 //converts a string into an interger
@@ -54,14 +54,10 @@ long long	get_time(void)
 
 	gettimeofday(&t, NULL);
 
-	return (t.tv_usec / 1000); //returns time in ms
+	return ((t.tv_sec * 1000) + (t.tv_usec / 1000)); //returns time in ms
 }
 
 long long	time_dif(t_meta *m)
 {
-	struct timeval	t;
-
-	gettimeofday(&t, NULL);
-
-	return (m->start_time - (t.tv_usec / 1000)); //returns time dif in ms
+	return (get_time() - m->start_time); //returns time dif in ms
 }

@@ -73,6 +73,7 @@ TSTDIR	=	tests/
 
 # File names (including their subdirectory if needed)
 FILES	=	main \
+			acters \
 			killers \
 			utilities \
 			initializers \
@@ -85,7 +86,7 @@ SRCS	=	$(addprefix $(SRCDIR), $(addsuffix .c, $(FILES)))
 OBJS	=	$(addprefix $(OBJDIR), $(addsuffix .o, $(FILES)))
 
 # Default command to call when using make run or make leaks
-CMD		=	./philosopher 10 100 100 100
+CMD		=	./philosopher 42 100 100 100
 
 #------------------------------------------------------------------------------#
 #                                   TARGETS                                    #

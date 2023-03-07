@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 14:40:48 by vjean             #+#    #+#             */
-/*   Updated: 2023/03/06 15:55:58 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/07 14:15:51 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,9 @@ void	init_threads(t_meta *m)
 
 	printf("init_threads start\n"); //DEBUG
 
+	m->state = MSTATE_RUNING;
+	m->start_time = get_time();
+
 	i = -1;
 	while (++i < m->philo_count)
 	{
@@ -79,6 +82,7 @@ void	init_threads(t_meta *m)
 			m->state = MSTATE_ERROR;
 			return ;
 		}
+		usleep(THREAD_W); //wait time in us between thread starts
 	}
 
 	printf("init_threads end\n"); //DEBUG
@@ -93,6 +97,11 @@ int	init_meta(t_meta *m, char **av)
 	m->time_death = ft_atoi(av[2]);
 	m->time_eat = ft_atoi(av[3]);
 	m->time_sleep = ft_atoi(av[4]);
+	if (m->philo_count > PHILO_M)
+	{
+		m->start_time = MSTATE_ERROR;
+		throw_error(ERR_P_NB);
+	}
 	if (av[5])
 		m->meal_limit = ft_atoi(av[5]);
 	if (m->philo_count >= 0 && m->time_death >= 0 && m->time_eat >= 0
