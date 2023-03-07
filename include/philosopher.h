@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:56:01 by llord             #+#    #+#             */
-/*   Updated: 2023/03/07 14:53:24 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/07 16:02:35 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@
 # define ACT_DIE	"died"
 
 # define ADRS		(void **)&
+# define ADRS2		(void ***)&
 
 # define THREAD_W	(int)5 //wait between thread starts (in us)
 # define PHILO_M	(int)1000 //max number of philosophers
@@ -109,6 +110,7 @@ void		*philosopher(void *void_philo);
 
 //from killers
 void		free_null(void **ptr);
+void		free_array(void ***ptr);
 void		free_all(t_meta *m);
 void		kill_threads(t_meta *m);
 void		kill_mutex(t_meta *m);
@@ -127,6 +129,6 @@ long long	get_time(void);
 long long	time_dif(t_meta *m);
 
 //from acter
-void	do_action(t_philo *p, int new_state);
+void		do_action(t_philo *p, int new_state);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 13:00:02 by llord             #+#    #+#             */
-/*   Updated: 2023/03/06 16:02:34 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/07 16:45:50 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,20 @@ void	free_null(void **ptr)
 {
 	free(*ptr);
 	*ptr = NULL;
+}
+
+//takes a array's adress and frees whatever is there, setting it to NULL after
+void	free_array(void ***ptr)
+{
+	int	i;
+
+	if (*ptr)
+	{
+		i = -1;
+		while ((*ptr)[++i])
+			free_null((void **) &((*ptr)[i]));
+		free_null((void **)ptr);
+	}
 }
 
 //removes the philosophers' threads
