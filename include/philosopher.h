@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:56:01 by llord             #+#    #+#             */
-/*   Updated: 2023/03/08 10:45:21 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/08 11:39:55 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@
 # define ADRS		(void **)&
 # define ADRS2		(void ***)&
 
-# define THREAD_W	(int)5 //wait between thread starts (in us)
+# define THREAD_W	(int)10 //wait between thread starts (in us)
 # define PHILO_M	(int)1000 //max number of philosophers
 
 // ======== ENUM STATES ======== //
@@ -60,8 +60,8 @@ enum e_pstate
 	PSTATE_DEAD		= -1,
 	PSTATE_STARTING	= 0,
 	PSTATE_SLEEPING	= 1,
-	PSTATE_THINKING	= 2,
-	PSTATE_EATING	= 3,
+	PSTATE_EATING	= 2,
+	PSTATE_THINKING	= 3,
 };
 
 // ======== STRUCTS ======== //
@@ -81,8 +81,9 @@ typedef struct s_philo
 	t_fork		*right_fork;
 	t_fork		*left_fork;
 
-	int			philo_id;
+	long long	last_meal;
 	int			meal_count;
+	int			philo_id;
 	int			state;
 
 }			t_philo;

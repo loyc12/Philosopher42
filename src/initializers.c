@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 14:40:48 by vjean             #+#    #+#             */
-/*   Updated: 2023/03/08 10:52:31 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/08 11:42:50 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	start_threads(t_meta *m)
 			m->state = MSTATE_ERROR;
 			return ;
 		}
-		usleep(THREAD_W); //wait time in us between thread starts
+		//usleep(THREAD_W); //wait time in us between thread starts //					no waiting?
 	}
 
 	printf("> Init_threads completed\n"); //DEBUG
@@ -80,7 +80,7 @@ void	init_philos(t_meta *m)
 		m->p_threads[i] = calloc(m->philo_count, sizeof(pthread_t));
 		p = m->philos[i];
 		p->m = m;
-		p->philo_id = i;
+		p->philo_id = i + 1; //+1 cause no 0
 		p->right_fork = m->forks[i];
 		p->left_fork = m->forks[(i + 1) % m->philo_count];
 	}
@@ -107,13 +107,12 @@ int	init_meta(t_meta *m, char **av)
 		init_philos(m);
 		if (m->state > MSTATE_ERROR)
 			return (EXIT_SUCCESS);
+		free_all(m);
 	}
 	else if (m->philo_count > PHILO_M)
 		throw_error(ERR_P_CNT);
 	else if (m->philo_count == 0)
 		throw_error(ERR_P_NONE);
-
-	free_all(m);
 
 	return (EXIT_FAILURE);
 }

@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 14:40:48 by vjean             #+#    #+#             */
-/*   Updated: 2023/03/08 11:00:33 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/08 11:37:30 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,20 @@
 void	*philosopher(void *_p)
 {
 	t_philo	*p;
+	long	delay;
 
 	p = (t_philo *)_p;
 
-	//print_action(time_dif(p->m), p->philo_id, ACT_BORN); //DEBUG
+	//print_action(time_dif(p->m), p->philo_id, ACT_BORN); //DEBU
 
-	if ((p->philo_id % 2) == 1 || p->philo_id == p->m->philo_count - 1) //only make even number eat
-		do_action(p, PSTATE_SLEEPING);
-	else
-		do_action(p, PSTATE_EATING);
+	if ((p->philo_id % 2) == 1) //makes uneven wait
+	{
+		delay = 1000 * (p->m->time_eat); //make it wait an extra amount per philosopher?					TODO
+		usleep(delay);
+		if (p->philo_id == p->m->philo_count) //makes last one wait if uneven
+			usleep(delay);
+	}
+	do_action(p, PSTATE_EATING);
 
 	return (NULL);
 }
@@ -88,3 +93,14 @@ int	main(int ac, char **av)
 
 	return (exit_status);
 }
+
+/*
+thinking is the default state
+start with uneven eating (safe last)
+
+if the number is uneven, is a 3 cycle, else a two cycle
+
+each "cycle" consist of eating, sleeping and then thinking, until they can eat again
+
+
+*/
