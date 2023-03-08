@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 14:40:48 by vjean             #+#    #+#             */
-/*   Updated: 2023/03/07 14:54:41 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/08 10:58:22 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,11 @@
 void	eat_w_forks(t_philo *p)
 {
 	//pick both forks if mutex allows
-	print_action(time_dif(p->m), p->philo_id, ACT_TAKE);
-	print_action(time_dif(p->m), p->philo_id, ACT_TAKE);
+	//print_action(time_dif(p->m), p->philo_id, ACT_TAKE);
+	//print_action(time_dif(p->m), p->philo_id, ACT_TAKE);
+
 	print_action(time_dif(p->m), p->philo_id, ACT_EAT);
+
 	//place back both forks
 }
 
@@ -38,6 +40,6 @@ void	do_action(t_philo *p, int new_state)
 	else if (new_state == PSTATE_EATING)
 		eat_w_forks(p);
 	else
-		throw_error(ERR_ACT);
+		throw_error(ERR_ACTION);
 
 }

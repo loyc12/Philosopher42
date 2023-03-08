@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:56:01 by llord             #+#    #+#             */
-/*   Updated: 2023/03/07 16:02:35 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/08 10:45:21 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,14 @@
 
 // ======== DEFINITIONS ======== //
 
-# define ERR_ARG	"Input Error : Invalid argument count"
-# define ERR_NUM	"Input Error : Non-digit input are invalid"
-# define ERR_P_NB	"Input Error : Cannot seat this many philosophers"
+# define ERR_A_CNT	"Input Error : Invalid argument count"
+# define ERR_A_VAL	"Input Error : Values have to be unsigned intergers"
+# define ERR_P_NONE	"Input Error : I am not, therefore I think not"
+# define ERR_P_CNT	"Input Error : Cannot seat this many philosophers"
 # define ERR_INIT	"Process Error : Initialization failure"
+# define ERR_ACTION	"Process Error : Invalid value given"
 # define ERR_THREAD	"Process Error : Thread failure"
-# define ERR_MUT	"Process Error : Mutex failure"
-# define ERR_ACT	"Value Error : Unknown action selected"
+# define ERR_MUTEX	"Process Error : Mutex failure"
 
 # define ACT_BORN	"has been born"
 # define ACT_TAKE	"has taken a fork"
@@ -121,9 +122,9 @@ void		print_action(long long time, int philo_id, char *action);
 int			ft_atoi(const char *str);
 
 //from initializers
+void		start_threads(t_meta *m);
 void		init_forks(t_meta *m);
 void		init_philos(t_meta *m);
-void		init_threads(t_meta *m);
 int			init_meta(t_meta *m, char **av);
 long long	get_time(void);
 long long	time_dif(t_meta *m);

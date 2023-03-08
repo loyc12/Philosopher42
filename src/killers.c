@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 13:00:02 by llord             #+#    #+#             */
-/*   Updated: 2023/03/07 16:45:50 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/08 10:48:43 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	free_all(t_meta *m)
 	}
 	free_null(ADRS m);
 
-	printf("freed everything\n"); //DEBUG
+	printf("> Freed all\n"); //DEBUG
 }
 
 //takes a pointer's adress and frees whatever is there, setting it to NULL after
@@ -60,7 +60,7 @@ void	kill_threads(t_meta *m)
 		pthread_join(*m->p_threads[i], NULL);
 	}
 
-	printf("killed threads\n"); //DEBUG
+	printf("> Killed all threads\n"); //DEBUG
 }
 
 //removes the philosophers' threads
@@ -74,5 +74,5 @@ void	kill_mutex(t_meta *m)
 		pthread_mutex_destroy(&(m->forks[i]->f_mutex));
 	}
 
-	printf("killed mutexes\n"); //DEBUG
+	printf("> Killed all mutexes\n"); //DEBUG
 }
