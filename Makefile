@@ -24,7 +24,7 @@ WHITE	= \033[0;97m
 # Special variables
 DEFAULT_GOAL: all
 .DELETE_ON_ERROR: $(NAME)
-.PHONY: all bonus clean clear fclean fclear re run rerun display leaks ldirs
+.PHONY: all ldirs bonus clean fclean clear fclear re run rerun leaks releaks display
 
 #------------------------------------------------------------------------------#
 #                                    FLAGS                                     #
@@ -39,7 +39,7 @@ else
 endif
 
 # Debug mode
-export DEBUG = TRUE
+export DEBUG = FALSE
 ifeq ($(DEBUG),TRUE)
 	MODE = -g
 else
@@ -49,7 +49,7 @@ endif
 # Start screen mode
 export GRAPHIC = FALSE
 ifeq ($(GRAPHIC),TRUE)
-	START = bash smthg.sh
+	START = bash filenam.sh
 else
 	START =
 endif
@@ -126,16 +126,17 @@ fclean: clean
 re: fclean all
 	@echo "$(CYAN)Cleaned and rebuilt everything!$(DEF_COLOR)"
 
-# Display start scrren
-display:
-	$(HIDE) $(START)
-
-# Runs the program NEED TO BE FIXED
+# Runs the program
 rerun: re run
 run: all
 	$(HIDE) $(CMD)
 
 # Runs the program with valgrind
+releaks: re leaks
 leaks: all
 	@echo "$(RED)Checking leaks...$(DEF_COLOR)"
 	$(HIDE) valgrind --show-leak-kinds=all --trace-children=yes --leak-check=full --track-fds=yes --suppressions=include/supp $(CMD)
+
+# Display start screen
+display:
+	$(HIDE) $(START)
