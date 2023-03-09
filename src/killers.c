@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 13:00:02 by llord             #+#    #+#             */
-/*   Updated: 2023/03/08 10:48:43 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/09 10:38:20 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	kill_threads(t_meta *m)
 	i = -1;
 	while (++i < m->philo_count)
 	{
-		pthread_join(*m->p_threads[i], NULL);
+		pthread_cancel(*m->p_threads[i]);
 	}
 
 	printf("> Killed all threads\n"); //DEBUG

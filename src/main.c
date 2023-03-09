@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 14:40:48 by vjean             #+#    #+#             */
-/*   Updated: 2023/03/08 11:37:30 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/09 10:46:14 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	*philosopher(void *_p)
 		if (p->philo_id == p->m->philo_count) //makes last one wait if uneven
 			usleep(delay);
 	}
-	do_action(p, PSTATE_EATING);
+	live(p);
 
 	return (NULL);
 }
@@ -37,15 +37,21 @@ void	*philosopher(void *_p)
 //loops until a philosopher dies
 void	wait_death(t_meta *m)
 {
-	int	i;
-
-	i = -1;
+	usleep(900 * m->time_death);
 	while (m->state == MSTATE_RUNING)
 	{
-		printf("> Skipping death check for now\n"); //DEBUG
+		usleep(1000);
+		/*if (m->meal_limit >= 0 && check_meal_count(m))
+		{
+			m->state = MSTATE_ENDING;
 
-		m->state = MSTATE_ENDING; //checks for death here
+			printf("> Meal coun reached\n"); //DEBUG
+
+			return ;
+		}*/
 	}
+
+	printf("> Death detected\n"); //DEBUG
 }
 
 //main logic loop
@@ -58,7 +64,7 @@ int	main_loop(t_meta *m)
 	if (m->state > MSTATE_ERROR) //only waits for death if the threading worked
 		wait_death(m);
 
-	kill_threads(m);
+	//kill_threads(m);
 
 	if (m->state <= MSTATE_ERROR) //only fail if the threading failed
 		return (EXIT_FAILURE);

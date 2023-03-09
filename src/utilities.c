@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 14:40:48 by vjean             #+#    #+#             */
-/*   Updated: 2023/03/08 10:38:25 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/09 10:20:14 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ long long	get_time(void)
 	return ((t.tv_sec * 1000) + (t.tv_usec / 1000)); //returns time in ms
 }
 
-long long	time_dif(t_meta *m)
+int	time_dif(long long time)
 {
-	return (get_time() - m->start_time); //returns time dif in ms
+	return ((int)(get_time() - time)); //returns time dif in ms
 }

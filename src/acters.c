@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 14:40:48 by vjean             #+#    #+#             */
-/*   Updated: 2023/03/08 11:41:56 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/09 11:56:05 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,42 +14,71 @@
 
 void	eat_w_forks(t_philo *p)
 {
-	//pick both forks if mutex allows
+	//picks both forks and locks mutex
+	pthread_mutex_lock(&(p->left_fork->f_mutex));
+	pthread_mutex_lock(&(p->right_fork->f_mutex));
 	//print_action(time_dif(p->m), p->philo_id, ACT_TAKE);
 	//print_action(time_dif(p->m), p->philo_id, ACT_TAKE);
 
-	print_action(time_dif(p->m), p->philo_id, ACT_EAT);
+	print_action(time_dif(p->m->start_time), p->philo_id, ACT_EAT);
 
 	p->last_meal = get_time();
 	usleep(1000 * p->m->time_eat);
+	p->meal_count++;
 	p->last_meal = get_time();
 
-	//place back both forks
+	//places back both forks and unlocks mutex
+	pthread_mutex_unlock(&(p->left_fork->f_mutex));
+	pthread_mutex_unlock(&(p->right_fork->f_mutex));
 }
 
-//selects a given action and executes it (doesn't support born/pick)
-void	do_action(t_philo *p, int new_state)
+//ameks the philo sleep while checking for death. returns 1 if dead, 0 if successful
+int	sleep_n_check(t_philo *p)
 {
-	if (p->state == new_state)
-		printf("> "); //symbol for redundant state change
+	int32_t	time_i; //in ms
 
-	p->state = new_state;
+	print_action(time_dif(p->m->start_time), p->philo_id, ACT_SLEEP);
 
-	if (new_state == PSTATE_DEAD)
+	time_i = -1;
+	while (++time_i < p->m->time_sleep)
 	{
-		print_action(time_dif(p->m), p->philo_id, ACT_DIE);
-		p->m->state = MSTATE_ENDING; //protect with mutex???				TODO
+		if (p->m->state == MSTATE_ENDING)
+			return (0);
+		if (time_dif(p->last_meal) > p->m->time_death) //checks for death during sleep
+			return (1);
+		usleep(1000);
 	}
-	else if (new_state == PSTATE_SLEEPING)
+	return (0);
+}
+
+int	think_n_check(t_philo *p)
+{
+	int	time_i; //in ms
+
+	print_action(time_dif(p->m->start_time), p->philo_id, ACT_THINK);
+
+	time_i = -1;
+	while (++time_i < p->m->time_think)
 	{
-		print_action(time_dif(p->m), p->philo_id, ACT_SLEEP);
-		usleep(1000 * p->m->time_sleep);
+		if (p->m->state == MSTATE_ENDING)
+			return (0);
+		if (time_dif(p->last_meal) > p->m->time_death) //checks for death during sleep
+			return (1);
+		usleep(1000);
 	}
-	else if (new_state == PSTATE_THINKING)
-		print_action(time_dif(p->m), p->philo_id, ACT_THINK);
-	else if (new_state == PSTATE_EATING)
+	return (0);
+}
+
+void	live(t_philo *p)
+{
+	while (1)
+	{
 		eat_w_forks(p);
-	else
-		throw_error(ERR_ACTION);
-
+		if (sleep_n_check(p))
+			break ;
+		if (think_n_check(p))
+			break ;
+	}
+	p->m->state = MSTATE_ENDING;
+	print_action(time_dif(p->m->start_time), p->philo_id, ACT_DIE);
 }

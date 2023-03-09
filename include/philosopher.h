@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:56:01 by llord             #+#    #+#             */
-/*   Updated: 2023/03/08 11:39:55 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/09 11:55:03 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ typedef struct s_meta
 	int			time_death;		//in ms
 	int			time_eat;		//in ms
 	int			time_sleep;		//in ms
+	int			time_think;		//in ms
 	int			meal_limit;		//optional argument, ends program when reached by all philosophers
 
 	pthread_t	**p_threads;
@@ -128,9 +129,10 @@ void		init_forks(t_meta *m);
 void		init_philos(t_meta *m);
 int			init_meta(t_meta *m, char **av);
 long long	get_time(void);
-long long	time_dif(t_meta *m);
+int			time_dif(long long time);
 
 //from acter
-void		do_action(t_philo *p, int new_state);
+void		live(t_philo *p);
+//void		do_action(t_philo *p, int new_state);
 
 #endif
