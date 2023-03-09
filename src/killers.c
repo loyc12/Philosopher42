@@ -6,11 +6,11 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 13:00:02 by llord             #+#    #+#             */
-/*   Updated: 2023/03/09 10:38:20 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/09 15:08:56 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philosopher.h"
+#include "philo.h"
 
 void	free_all(t_meta *m)
 {
@@ -25,7 +25,7 @@ void	free_all(t_meta *m)
 	}
 	free_null(ADRS m);
 
-	printf("> Freed all\n"); //DEBUG
+	//printf("> Freed all\n"); //DEBUG
 }
 
 //takes a pointer's adress and frees whatever is there, setting it to NULL after
@@ -49,18 +49,18 @@ void	free_array(void ***ptr)
 	}
 }
 
-//removes the philosophers' threads
-void	kill_threads(t_meta *m)
+//waits until every thread is completed before continuing
+void	wait_threads(t_meta *m)
 {
 	int		i;
 
 	i = -1;
 	while (++i < m->philo_count)
 	{
-		pthread_cancel(*m->p_threads[i]);
+		pthread_join(*m->p_threads[i], NULL);
 	}
 
-	printf("> Killed all threads\n"); //DEBUG
+	//printf("> All threads finished\n"); //DEBUG
 }
 
 //removes the philosophers' threads
@@ -72,7 +72,8 @@ void	kill_mutex(t_meta *m)
 	while (++i < m->philo_count)
 	{
 		pthread_mutex_destroy(&(m->forks[i]->f_mutex));
+		pthread_mutex_destroy(&(m->philos[i]->p_mutex));
 	}
 
-	printf("> Killed all mutexes\n"); //DEBUG
+	//printf("> Killed all mutexes\n"); //DEBUG
 }

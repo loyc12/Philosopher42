@@ -49,7 +49,7 @@ endif
 # Start screen mode
 export GRAPHIC = FALSE
 ifeq ($(GRAPHIC),TRUE)
-	START = bash filenam.sh
+	START = bash filename.sh
 else
 	START =
 endif
@@ -66,7 +66,7 @@ MD		=	mkdir -p
 INCLUDE =	-I include
 
 # Program and directory names
-NAME	=	philosopher
+NAME	=	philo
 SRCDIR	=	src/
 OBJDIR	=	bin/
 TSTDIR	=	tests/
@@ -86,8 +86,7 @@ SRCS	=	$(addprefix $(SRCDIR), $(addsuffix .c, $(FILES)))
 OBJS	=	$(addprefix $(OBJDIR), $(addsuffix .o, $(FILES)))
 
 # Default command to call when using make run or make leaks
-CMD		=	./philosopher 2 350 200 100 1
-
+CMD		=	./philo 5 800 200 200 30
 #------------------------------------------------------------------------------#
 #                                   TARGETS                                    #
 #------------------------------------------------------------------------------#

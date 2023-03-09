@@ -6,11 +6,11 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 14:40:48 by vjean             #+#    #+#             */
-/*   Updated: 2023/03/09 10:20:14 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/09 15:07:13 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philosopher.h"
+#include "philo.h"
 
 //writes a given error message (defined in .h)
 int	throw_error(char *error)
@@ -43,7 +43,7 @@ int	ft_atoi(const char *str)
 	while ('0' <= str[i] && str[i] <= '9')
 		number = (number * 10) + (str[i++] - '0');
 
-	printf("> Inputed value : %i\n", number); //DEBUG
+	//printf("> Inputed value : %i\n", number); //DEBUG
 
 	if (!str[i])
 		return (number);
@@ -51,6 +51,7 @@ int	ft_atoi(const char *str)
 	return (-1);
 }
 
+//gives the current time in ms
 long long	get_time(void)
 {
 	struct timeval	t;
@@ -60,6 +61,7 @@ long long	get_time(void)
 	return ((t.tv_sec * 1000) + (t.tv_usec / 1000)); //returns time in ms
 }
 
+//returns how long ago a specified time was (in ms)
 int	time_dif(long long time)
 {
 	return ((int)(get_time() - time)); //returns time dif in ms

@@ -6,45 +6,18 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 14:40:48 by vjean             #+#    #+#             */
-/*   Updated: 2023/03/09 11:55:41 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/09 15:08:56 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philosopher.h"
+#include "philo.h"
 
-//creates the philosophers' threads
-void	start_threads(t_meta *m)
-{
-	t_philo	*p;
-	int		i;
-
-	printf("> Init_threads started\n"); //DEBUG
-
-	m->state = MSTATE_RUNING;
-	m->start_time = get_time();
-
-	i = -1;
-	while (++i < m->philo_count)
-	{
-		p = m->philos[i];
-		if (pthread_create(m->p_threads[i], NULL, philosopher, m->philos[i]))
-		{
-			throw_error(ERR_THREAD);
-			m->state = MSTATE_ERROR;
-			return ;
-		}
-		//usleep(THREAD_W); //wait time in us between thread starts //					no waiting?
-	}
-
-	printf("> Init_threads completed\n"); //DEBUG
-}
-
-//initializes the fork structs
+//initializes the fork structs AND the t_meta mutex
 void	init_forks(t_meta *m)
 {
 	int	i;
 
-	printf("> Init_forks started\n"); //DEBUG
+	//printf("> Init_forks started\n"); //DEBUG
 
 	i = -1;
 	m->forks = calloc(m->philo_count, sizeof(t_fork *));
@@ -52,15 +25,9 @@ void	init_forks(t_meta *m)
 	{
 		m->forks[i] = calloc(1, sizeof(t_fork));
 		m->forks[i]->fork_id = i;
-		if (pthread_mutex_init(&m->forks[i]->f_mutex, NULL))
-		{
-			throw_error(ERR_MUTEX);
-			m->state = MSTATE_ERROR;
-			return ;
-		}
 	}
 
-	printf("> Init_forks completed\n"); //DEBUG
+	//printf("> Init_forks completed\n"); //DEBUG
 }
 
 //initializes the philosopher structs
@@ -69,7 +36,7 @@ void	init_philos(t_meta *m)
 	t_philo	*p;
 	int		i;
 
-	printf("> Init_philos started\n"); //DEBUG
+	//printf("> Init_philos started\n"); //DEBUG
 
 	i = -1;
 	m->philos = calloc(m->philo_count, sizeof(t_philo *));
@@ -85,12 +52,39 @@ void	init_philos(t_meta *m)
 		p->left_fork = m->forks[(i + 1) % m->philo_count];
 	}
 
-	printf("> Init_philos completed\n"); //DEBUG
+	//printf("> Init_philos completed\n"); //DEBUG
+}
+
+void	init_mutexes(t_meta *m)
+{
+	int	i;
+
+	//printf("> Init_mutexes started\n"); //DEBUG
+
+	i = -1;
+	while (++i < m->philo_count)
+	{
+		if (pthread_mutex_init(&(m->philos[i]->p_mutex), NULL)
+			|| pthread_mutex_init(&(m->forks[i]->f_mutex), NULL))
+		{
+			throw_error(ERR_MUTEX);
+			m->state = MSTATE_ERROR;
+			return ;
+		}
+	}
+	if (pthread_mutex_init(&(m->m_mutex), NULL))
+	{
+		throw_error(ERR_MUTEX);
+		m->state = MSTATE_ERROR;
+		return ;
+	}
+
+	//printf("> Init_mutexes completed\n"); //DEBUG
 }
 
 /*
-	2p : c = 2e : t = 2e - (e + s) : t = max((e - s), 0)	: d ~ e
-	3p : c = 3e : t = 3e - (e + s) : t = max((2e - s), 0)	: d ~ 2e
+	2p	: c = 2e	: t = 2e - (e + s)	: t = max((e - s), 0)
+	3p	: c = 3e	: t = 3e - (e + s)	: t = max((2e - s), 0)
 
 	if (p_n == 1)					//solo case
 		t = t_death + 10d
@@ -100,7 +94,8 @@ void	init_philos(t_meta *m)
 		t = max((2e - s), 0) + 2d
 */
 
-void	set_times(t_meta *m, char **av)
+//sets the constants for t_meta
+void	set_consts(t_meta *m, char **av)
 {
 	m->philo_count = ft_atoi(av[1]);
 	m->time_death = ft_atoi(av[2]);
@@ -109,6 +104,8 @@ void	set_times(t_meta *m, char **av)
 
 	if (av[5])
 		m->meal_limit = ft_atoi(av[5]);
+	else
+		m->meal_limit = -1;
 
 	if (m->philo_count == 1)
 		m->time_think = 2 * m->time_death; //solo case
@@ -120,15 +117,15 @@ void	set_times(t_meta *m, char **av)
 	if (m->time_think < 0)
 		m->time_think = 0;
 
-	printf("> Time_think value : %i\n", m->time_think); //DEBUG
+	//printf("> Time_think value : %i\n", m->time_think); //DEBUG
 }
 
 //initialises g_meta and its sub structs/things
 int	init_meta(t_meta *m, char **av)
 {
-	printf("> Init_meta started\n"); //DEBUG
+	//printf("> Init_meta started\n"); //DEBUG
 
-	set_times(m, av);
+	set_consts(m, av);
 
 	if (m->philo_count > 0 && m->philo_count <= PHILO_M
 		&& m->time_death >= 0 && m->time_eat >= 0
@@ -136,6 +133,7 @@ int	init_meta(t_meta *m, char **av)
 	{
 		init_forks(m);
 		init_philos(m);
+		init_mutexes(m);
 		if (m->state > MSTATE_ERROR)
 			return (EXIT_SUCCESS);
 		free_all(m);
