@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:56:01 by llord             #+#    #+#             */
-/*   Updated: 2023/03/14 09:10:14 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/14 12:16:56 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ typedef struct s_meta
 	t_fork			**forks;
 	t_philo			**philos;
 
-	long long		start_time;
+	long long		start_time;		//in ms
 
 	pthread_mutex_t	m_mutex;		//mutex for meta's state
 	int				state;
