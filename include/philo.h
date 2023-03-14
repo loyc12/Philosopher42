@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:56:01 by llord             #+#    #+#             */
-/*   Updated: 2023/03/09 15:06:58 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/14 09:10:14 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@
 # define ADRS		(void **)&
 # define ADRS2		(void ***)&
 
+# define SLEEP_T	(int)1000 //(in usec) interval during death checks when doing action
 # define PHILO_M	(int)1000 //max number of philosophers
 
 // ======== ENUM STATES ======== //

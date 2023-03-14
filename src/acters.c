@@ -6,12 +6,13 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 14:40:48 by vjean             #+#    #+#             */
-/*   Updated: 2023/03/09 15:14:03 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/14 09:31:33 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+//checks wheter a given philosopher has died or otherwise should stop
 int	check_stop_flags(t_philo *p)
 {
 	pthread_mutex_lock(&(p->m->m_mutex));
@@ -46,7 +47,7 @@ int	eat_n_check(t_philo *p)
 	{
 		if (check_stop_flags(p))
 			return (1);
-		usleep(1000);
+		usleep(SLEEP_T);
 	}
 	return (0);
 }
@@ -63,7 +64,7 @@ int	think_n_check(t_philo *p)
 	{
 		if (check_stop_flags(p))
 			return (1);
-		usleep(1000);
+		usleep(SLEEP_T);
 	}
 	return (0);
 }
@@ -80,11 +81,12 @@ int	sleep_n_check(t_philo *p)
 	{
 		if (check_stop_flags(p))
 			return (1);
-		usleep(1000);
+		usleep(SLEEP_T);
 	}
 	return (0);
 }
 
+//picks up the forks, make the philo eat, and then puts them back
 int	eat_w_forks(t_philo *p)
 {
 	if (check_stop_flags(p))
@@ -129,6 +131,7 @@ void	live(t_philo *p)
 		if (think_n_check(p))
 			break ;
 	}
-
+	pthread_mutex_lock(&(p->m->m_mutex));
 	p->m->state = MSTATE_ENDING;
+	pthread_mutex_unlock(&(p->m->m_mutex));
 }

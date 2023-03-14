@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/12 14:40:48 by vjean             #+#    #+#             */
-/*   Updated: 2023/03/09 15:24:28 by llord            ###   ########.fr       */
+/*   Created: 2023/03/14 08:55:54 by llord             #+#    #+#             */
+/*   Updated: 2023/03/14 09:33:02 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ void	*philosopher(void *_p)
 	p = (t_philo *)_p;
 	p->last_meal = p->m->start_time;
 
-	//print_action(time_dif(p->m), p->philo_id, ACT_BORN); //DEBU
+	//print_action(time_dif(p->m), p->philo_id, ACT_BORN); //DEBUG
 
 	if ((p->philo_id % 2) == 1) //makes uneven wait
 	{
-		delay = 1000 * (p->m->time_eat); //make it wait an extra amount per philosopher?					TODO
+		delay = 1000 * (p->m->time_eat);
 		usleep(delay);
 		if (p->philo_id == p->m->philo_count) //makes last one wait if uneven
 			usleep(delay);
@@ -104,14 +104,14 @@ int	check_meal_count(t_meta *m)
 //loops until a philosopher dies or the meal limit is reached
 void	make_checks(t_meta *m)
 {
-	usleep(1000);
+	usleep(SLEEP_T);
 	while (1)
 	{
 		if (check_death(m))
 			break ;
 		if (m->meal_limit >= 0 && check_meal_count(m))
 			break ;
-		usleep(1000);
+		usleep(SLEEP_T);
 	}
 	pthread_mutex_lock(&(m->m_mutex));
 	m->state = MSTATE_ENDING;
