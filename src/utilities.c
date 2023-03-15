@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 14:40:48 by vjean             #+#    #+#             */
-/*   Updated: 2023/03/14 09:30:45 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/15 14:16:26 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	throw_error(char *error)
 //prints a given action (from DEFINE)
 void	print_action(long long time, int philo_id, char *action)
 {
-	printf("%lli : %i %s\n", time, philo_id, action);
+	printf("%lli : #%i %s\n", time, philo_id, action);
 }
 
 //converts a string into an interger
@@ -45,7 +45,7 @@ int	ft_atoi(const char *str)
 
 	//printf("> Inputed value : %i\n", number); //DEBUG
 
-	if (!str[i])
+	if (!str[i] && number > 0)
 		return (number);
 	throw_error(ERR_A_VAL);
 	return (-1);

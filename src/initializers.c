@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 14:40:48 by vjean             #+#    #+#             */
-/*   Updated: 2023/03/09 15:08:56 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/15 15:41:28 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,19 +105,9 @@ void	set_consts(t_meta *m, char **av)
 	if (av[5])
 		m->meal_limit = ft_atoi(av[5]);
 	else
-		m->meal_limit = -1;
+		m->meal_limit = 0;
 
-	if (m->philo_count == 1)
-		m->time_think = 2 * m->time_death; //solo case
-	else if (m->philo_count % 2 == 0)
-		m->time_think = m->time_eat - m->time_sleep; //even case
-	else
-		m->time_think = (2 * m->time_eat) - m->time_sleep; //uneven case
-
-	if (m->time_think < 0)
-		m->time_think = 0;
-
-	//printf("> Time_think value : %i\n", m->time_think); //DEBUG
+	find_time_think(m);
 }
 
 //initialises g_meta and its sub structs/things
@@ -128,8 +118,8 @@ int	init_meta(t_meta *m, char **av)
 	set_consts(m, av);
 
 	if (m->philo_count > 0 && m->philo_count <= PHILO_M
-		&& m->time_death >= 0 && m->time_eat >= 0
-		&& m->time_sleep >= 0 && (!av[5] || m->meal_limit >= 0))
+		&& m->time_death > 0 && m->time_eat > 0
+		&& m->time_sleep > 0 && (!av[5] || m->meal_limit > 0))
 	{
 		init_forks(m);
 		init_philos(m);

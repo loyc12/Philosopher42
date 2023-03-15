@@ -6,39 +6,19 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 14:40:48 by vjean             #+#    #+#             */
-/*   Updated: 2023/03/14 09:31:33 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/15 16:06:41 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-//checks wheter a given philosopher has died or otherwise should stop
-int	check_stop_flags(t_philo *p)
-{
-	pthread_mutex_lock(&(p->m->m_mutex));
-	if (p->m->state == MSTATE_ENDING) //checks for ending flag during sleep
-	{
-		pthread_mutex_unlock(&(p->m->m_mutex));
-		return (1);
-	}
-	pthread_mutex_unlock(&(p->m->m_mutex));
-	if (time_dif(p->last_meal) > p->m->time_death) //checks for death during sleep
-	{
-		print_action(time_dif(p->m->start_time), p->philo_id, ACT_DIE);
-
-		pthread_mutex_lock(&(p->p_mutex));
-		p->state = PSTATE_DEAD;
-		pthread_mutex_unlock(&(p->p_mutex));
-
-		return (1);
-	}
-	return (0);
-}
-
 //makes the philo eat while checking for death. returns 1 if dead, 0 if successful
 int	eat_n_check(t_philo *p)
 {
 	long long	time; //in ns
+
+	if (check_stop_flags(p))
+		return (1);
 
 	print_action(time_dif(p->m->start_time), p->philo_id, ACT_EAT);
 
@@ -57,6 +37,9 @@ int	think_n_check(t_philo *p)
 {
 	long long	time; //in ns
 
+	if (check_stop_flags(p))
+		return (1);
+
 	print_action(time_dif(p->m->start_time), p->philo_id, ACT_THINK);
 
 	time = get_time();
@@ -73,6 +56,9 @@ int	think_n_check(t_philo *p)
 int	sleep_n_check(t_philo *p)
 {
 	long long	time; //in ns
+
+	if (check_stop_flags(p))
+		return (1);
 
 	print_action(time_dif(p->m->start_time), p->philo_id, ACT_SLEEP);
 
@@ -92,11 +78,23 @@ int	eat_w_forks(t_philo *p)
 	if (check_stop_flags(p))
 		return (1);
 
-	//picks both forks and locks their mutex
+	//picks the left fork and locks its mutex
 	pthread_mutex_lock(&(p->left_fork->f_mutex));
+	if (check_stop_flags(p))
+	{
+		pthread_mutex_unlock(&(p->left_fork->f_mutex));
+		return (1);
+	}
 	print_action(time_dif(p->m->start_time), p->philo_id, ACT_TAKE);
 
+	//picks the right fork and locks its mutex
 	pthread_mutex_lock(&(p->right_fork->f_mutex));
+	if (check_stop_flags(p))
+	{
+		pthread_mutex_unlock(&(p->left_fork->f_mutex));
+		pthread_mutex_unlock(&(p->right_fork->f_mutex));
+		return (1);
+	}
 	print_action(time_dif(p->m->start_time), p->philo_id, ACT_TAKE);
 
 	//eats
@@ -124,6 +122,14 @@ void	live(t_philo *p)
 {
 	while (1)
 	{
+		pthread_mutex_lock(&(p->p_mutex));
+		if (p->m->philo_count == 1)
+		{
+			pthread_mutex_unlock(&(p->p_mutex));
+			if (think_n_check(p))
+				break ;
+		}
+		pthread_mutex_unlock(&(p->p_mutex));
 		if (eat_w_forks(p))
 			break ;
 		if (sleep_n_check(p))

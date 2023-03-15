@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:56:01 by llord             #+#    #+#             */
-/*   Updated: 2023/03/14 12:16:56 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/15 15:50:48 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 // ======== DEFINITIONS ======== //
 
 # define ERR_A_CNT	"Input Error : Invalid argument count"
-# define ERR_A_VAL	"Input Error : Values have to be unsigned intergers"
+# define ERR_A_VAL	"Input Error : Values have to greater than 0"
 # define ERR_P_NONE	"Input Error : I am not, therefore I think not"
 # define ERR_P_CNT	"Input Error : Cannot seat this many philosophers"
 # define ERR_INIT	"Process Error : Initialization failure"
@@ -42,8 +42,9 @@
 # define ADRS		(void **)&
 # define ADRS2		(void ***)&
 
+# define BORN_T		(int)5 //(in usec) interval during philosopher creation
 # define SLEEP_T	(int)1000 //(in usec) interval during death checks when doing action
-# define PHILO_M	(int)1000 //max number of philosophers
+# define PHILO_M	(int)200 //max number of philosophers
 
 // ======== ENUM STATES ======== //
 
@@ -110,21 +111,13 @@ typedef struct s_meta
 
 // ======== FUNCTIONS ======== //
 
-//from main
-void		*philosopher(void *void_philo);
-void		start_threads(t_meta *m);
+//from acter
+void		live(t_philo *p);
 
-//from killers
-void		free_null(void **ptr);
-void		free_array(void ***ptr);
-void		free_all(t_meta *m);
-void		wait_threads(t_meta *m);
-void		kill_mutex(t_meta *m);
-
-//from utilities
-int			throw_error(char *error);
-void		print_action(long long time, int philo_id, char *action);
-int			ft_atoi(const char *str);
+//from checkers
+void		make_checks(t_meta *m);
+int			check_stop_flags(t_philo *p);
+void		find_time_think(t_meta *m);
 
 //from initializers
 void		init_forks(t_meta *m);
@@ -133,8 +126,20 @@ int			init_meta(t_meta *m, char **av);
 long long	get_time(void);
 int			time_dif(long long time);
 
-//from acter
-void		live(t_philo *p);
-//void		do_action(t_philo *p, int new_state);
+//from killers
+void		free_null(void **ptr);
+void		free_array(void ***ptr);
+void		free_all(t_meta *m);
+void		wait_threads(t_meta *m);
+void		kill_mutex(t_meta *m);
+
+//from main
+void		*philosopher(void *void_philo);
+void		start_threads(t_meta *m);
+
+//from utilities
+int			throw_error(char *error);
+void		print_action(long long time, int philo_id, char *action);
+int			ft_atoi(const char *str);
 
 #endif

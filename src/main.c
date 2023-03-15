@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 08:55:54 by llord             #+#    #+#             */
-/*   Updated: 2023/03/14 09:33:02 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/15 15:57:08 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	*philosopher(void *_p)
 
 	if ((p->philo_id % 2) == 1) //makes uneven wait
 	{
-		delay = 1000 * (p->m->time_eat);
+		delay = 1000 * p->m->time_eat;
 		usleep(delay);
 		if (p->philo_id == p->m->philo_count) //makes last one wait if uneven
 			usleep(delay);
@@ -53,69 +53,15 @@ void	start_threads(t_meta *m)
 		if (pthread_create(m->p_threads[i], NULL, philosopher, m->philos[i]))
 		{
 			throw_error(ERR_THREAD);
+			pthread_mutex_lock(&(m->m_mutex));
 			m->state = MSTATE_ERROR;
+			pthread_mutex_unlock(&(m->m_mutex));
 			return ;
 		}
+		usleep(BORN_T);
 	}
 
 	//printf("> Init_threads completed\n"); //DEBUG
-}
-
-//locks every philo's p_mutex and checks their status. return 1 if one is dead
-int	check_death(t_meta *m)
-{
-	int	i;
-
-	i = -1;
-	while (++i < m->philo_count)
-	{
-		pthread_mutex_lock(&(m->philos[i]->p_mutex));
-		if (m->philos[i]->state == PSTATE_DEAD)
-		{
-			//printf("> Death detected\n"); //DEBUG
-			pthread_mutex_unlock(&(m->philos[i]->p_mutex));
-			return (1);
-		}
-		pthread_mutex_unlock(&(m->philos[i]->p_mutex));
-	}
-	return (0);
-}
-
-//locks every philo's p_mutex and checks their meal count. return 0 if one is bellow limit
-int	check_meal_count(t_meta *m)
-{
-	int	i;
-
-	i = -1;
-	while (++i < m->philo_count)
-	{
-		pthread_mutex_lock(&(m->philos[i]->p_mutex));
-		if (m->philos[i]->meal_count < m->meal_limit)
-		{
-			pthread_mutex_unlock(&(m->philos[i]->p_mutex));
-			return (0);
-		}
-		pthread_mutex_unlock(&(m->philos[i]->p_mutex));
-	}
-	//printf("> Meal count reached\n"); //DEBUG
-	return (1);
-}
-
-//loops until a philosopher dies or the meal limit is reached
-void	make_checks(t_meta *m)
-{
-	usleep(SLEEP_T);
-	while (1)
-	{
-		if (check_death(m))
-			break ;
-		if (m->meal_limit >= 0 && check_meal_count(m))
-			break ;
-		usleep(SLEEP_T);
-	}
-	pthread_mutex_lock(&(m->m_mutex));
-	m->state = MSTATE_ENDING;
-	pthread_mutex_unlock(&(m->m_mutex));
 }
 
 //main logic for philosopher
@@ -125,8 +71,13 @@ int	run_philo(t_meta *m)
 
 	start_threads(m);
 
+	pthread_mutex_lock(&(m->m_mutex));
 	if (m->state > MSTATE_ERROR) //only waits for death if the threading worked
+	{
+		pthread_mutex_unlock(&(m->m_mutex));
 		make_checks(m);
+	}
+	pthread_mutex_unlock(&(m->m_mutex));
 
 	wait_threads(m);
 
@@ -138,19 +89,23 @@ int	run_philo(t_meta *m)
 	return (EXIT_SUCCESS);
 }
 
-void	print_philos(t_meta *m)
+void	print_philos(t_meta *m) //DEBUG						REMOVE ME
 {
-	t_philo *p;
-	int	i;
+	t_philo	*p;
+	int		i;
 
 	i = -1;
+	printf("\n");
 	while (++i < m->philo_count)
 	{
 		p = m->philos[i];
-		printf("\n Philo #%i\n", p->philo_id);
-		printf(" Death : %i\n", p->state);
-		printf(" Meals : %i\n", p->meal_count);
+		printf("#%i :", p->philo_id);
+		printf(" Ate %i", p->meal_count);
+		if (p->state == PSTATE_DEAD)
+			printf(" : !!! DEAD !!!");
+		printf("\n");
 	}
+	printf("\n");
 }
 
 //USE FT_CALLOC!!!!!!
@@ -171,7 +126,7 @@ int	main(int ac, char **av)
 
 	exit_status = run_philo(m); //runs the main logic loop
 
-	print_philos(m);
+	print_philos(m); //DEBUG
 
 	free_all(m);
 

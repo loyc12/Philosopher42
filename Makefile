@@ -24,7 +24,7 @@ WHITE	= \033[0;97m
 # Special variables
 DEFAULT_GOAL: all
 .DELETE_ON_ERROR: $(NAME)
-.PHONY: all ldirs bonus clean fclean clear fclear re run rerun leaks releaks display
+.PHONY: all ldirs bonus clean fclean clear fclear re run rerun leaks releaks display test1 test2 test3 test
 
 #------------------------------------------------------------------------------#
 #                                    FLAGS                                     #
@@ -75,6 +75,7 @@ TSTDIR	=	tests/
 FILES	=	main \
 			acters \
 			killers \
+			checkers \
 			utilities \
 			initializers \
 
@@ -86,7 +87,7 @@ SRCS	=	$(addprefix $(SRCDIR), $(addsuffix .c, $(FILES)))
 OBJS	=	$(addprefix $(OBJDIR), $(addsuffix .o, $(FILES)))
 
 # Default command to call when using make run or make leaks
-CMD		=	./philo 5 2000 2000 1000 5
+CMD		=	./philo 200 440 200 200 8
 #------------------------------------------------------------------------------#
 #                                   TARGETS                                    #
 #------------------------------------------------------------------------------#
@@ -139,3 +140,47 @@ leaks: all
 # Display start screen
 display:
 	$(HIDE) $(START)
+
+test1: re
+	./philo 1 610 200 200 8
+	./philo 1 610 060 200 8
+	./philo 1 610 200 060 8
+
+	./philo 1 590 200 200 8
+	./philo 1 590 200 060 8
+
+	./philo 1 060 200 200 8
+	./philo 1 060 060 060 8
+
+test2: re
+	./philo 2 610 200 200 8
+	./philo 2 610 060 200 8
+	./philo 2 610 200 060 8
+
+	./philo 2 590 200 200 8
+	./philo 2 590 200 060 8
+
+	./philo 2 060 200 200 8
+	./philo 2 060 060 060 8
+
+test3: re
+	./philo 3 610 200 200 8
+	./philo 3 610 060 200 8
+	./philo 3 610 200 060 8
+
+	./philo 3 590 200 200 8
+	./philo 3 590 200 060 8
+
+	./philo 3 060 200 200 8
+	./philo 3 060 060 060 8
+
+test: re
+	./philo 200 440 200 200 8
+	./philo 200 440 060 200 8
+	./philo 200 440 200 060 8
+
+	./philo 200 460 200 200 8
+	./philo 200 460 200 060 8
+
+	./philo 200 060 200 200 8
+	./philo 200 060 060 060 8
