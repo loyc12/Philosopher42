@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 14:40:48 by vjean             #+#    #+#             */
-/*   Updated: 2023/03/15 16:06:41 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/15 17:01:21 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,16 +120,16 @@ int	eat_w_forks(t_philo *p)
 
 void	live(t_philo *p)
 {
+	pthread_mutex_lock(&(p->p_mutex));
+	if (p->m->philo_count == 1)
+	{
+		pthread_mutex_unlock(&(p->p_mutex));
+		if (think_n_check(p))
+			return ;
+	}
+	pthread_mutex_unlock(&(p->p_mutex));
 	while (1)
 	{
-		pthread_mutex_lock(&(p->p_mutex));
-		if (p->m->philo_count == 1)
-		{
-			pthread_mutex_unlock(&(p->p_mutex));
-			if (think_n_check(p))
-				break ;
-		}
-		pthread_mutex_unlock(&(p->p_mutex));
 		if (eat_w_forks(p))
 			break ;
 		if (sleep_n_check(p))
@@ -137,7 +137,4 @@ void	live(t_philo *p)
 		if (think_n_check(p))
 			break ;
 	}
-	pthread_mutex_lock(&(p->m->m_mutex));
-	p->m->state = MSTATE_ENDING;
-	pthread_mutex_unlock(&(p->m->m_mutex));
 }

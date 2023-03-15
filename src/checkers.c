@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 13:41:48 by llord             #+#    #+#             */
-/*   Updated: 2023/03/15 15:56:10 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/15 16:53:14 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	check_stop_flags(t_philo *p)
 		return (1);
 	}
 	pthread_mutex_unlock(&(p->m->m_mutex));
-	if (time_dif(p->last_meal) > p->m->time_death) //checks for death during sleep
+	if (time_dif(p->last_meal) >= p->m->time_death) //checks for death during sleep
 	{
 		print_action(time_dif(p->m->start_time), p->philo_id, ACT_DIE);
 
@@ -92,7 +92,19 @@ int	check_stop_flags(t_philo *p)
 	return (0);
 }
 
-// Finds how long the philo ought to think for
+/*
+	2p	: c = 2e	: t = 2e - (e + s)	: t = max((e - s), 0)
+	3p	: c = 3e	: t = 3e - (e + s)	: t = max((2e - s), 0)
+
+	if (p_n == 1)					//solo case
+		t = t_death + 10d
+	else if							//even case
+		t = max((e - s), 0) + d
+	else							//uneven case
+		t = max((2e - s), 0) + 2d
+*/
+
+//finds how long the philos ought to think for
 void	find_time_think(t_meta *m)
 {
 	int	buffer_time;
@@ -105,16 +117,16 @@ void	find_time_think(t_meta *m)
 	else if (m->philo_count % 2 == 0) //even case
 	{
 		m->time_think = m->time_eat - m->time_sleep;
-		buffer_time = (m->time_death - m->time_sleep - (2 * m->time_eat)) / 2;
+		buffer_time = (m->time_death - ((2 * m->time_eat) + m->time_sleep)) / 2;
 	}
 	else //uneven case
 	{
 		m->time_think = (2 * m->time_eat) - m->time_sleep;
-		buffer_time = (m->time_death - m->time_sleep - (3 * m->time_eat)) / 2;
+		buffer_time = (m->time_death - ((3 * m->time_eat) + m->time_sleep)) / 2;
 	}
 	if (m->time_think < 0)
 		m->time_think = 0;
-	if (buffer_time > m->time_think)
+	if (m->time_think < buffer_time)
 		m->time_think = buffer_time;
 
 	//printf("> Time_think value : %i\n", m->time_think); //DEBUG

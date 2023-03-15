@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 14:40:48 by vjean             #+#    #+#             */
-/*   Updated: 2023/03/15 15:41:28 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/15 16:32:47 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,18 +81,6 @@ void	init_mutexes(t_meta *m)
 
 	//printf("> Init_mutexes completed\n"); //DEBUG
 }
-
-/*
-	2p	: c = 2e	: t = 2e - (e + s)	: t = max((e - s), 0)
-	3p	: c = 3e	: t = 3e - (e + s)	: t = max((2e - s), 0)
-
-	if (p_n == 1)					//solo case
-		t = t_death + 10d
-	else if							//even case
-		t = max((e - s), 0) + d
-	else							//uneven case
-		t = max((2e - s), 0) + 2d
-*/
 
 //sets the constants for t_meta
 void	set_consts(t_meta *m, char **av)

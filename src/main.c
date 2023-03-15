@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 08:55:54 by llord             #+#    #+#             */
-/*   Updated: 2023/03/15 15:57:08 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/15 17:05:35 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	*philosopher(void *_p)
 	long	delay;
 
 	p = (t_philo *)_p;
+
 	p->last_meal = p->m->start_time;
 
 	//print_action(time_dif(p->m), p->philo_id, ACT_BORN); //DEBUG
@@ -93,8 +94,10 @@ void	print_philos(t_meta *m) //DEBUG						REMOVE ME
 {
 	t_philo	*p;
 	int		i;
+	int		death_flag;
 
 	i = -1;
+	death_flag = 0;
 	printf("\n");
 	while (++i < m->philo_count)
 	{
@@ -102,10 +105,17 @@ void	print_philos(t_meta *m) //DEBUG						REMOVE ME
 		printf("#%i :", p->philo_id);
 		printf(" Ate %i", p->meal_count);
 		if (p->state == PSTATE_DEAD)
-			printf(" : !!! DEAD !!!");
+		{
+			death_flag = 1;
+			printf(" > !!! DEAD !!!");
+		}
 		printf("\n");
 	}
 	printf("\n");
+
+	if (death_flag)
+		printf("  Ran outta spagett, FOOL !!!\n\n");
+	printf("  Settings : %i %i %i %i (%i)\n\n", m->philo_count, m->time_death, m->time_eat, m->time_sleep, m->time_think);
 }
 
 //USE FT_CALLOC!!!!!!
@@ -118,7 +128,7 @@ int	main(int ac, char **av)
 	if (ac != 5 && ac != 6) //checks for a proper argcount
 		return (throw_error(ERR_A_CNT));
 
-	m = calloc(1, sizeof(t_meta));
+	m = calloc(1, sizeof(t_meta)); //CHAGNE TO FT_CALLOC !!!!!!
 	if (init_meta(m, av)) //initilizes t_meta and all its sub structs/things
 		return (throw_error(ERR_INIT));
 
@@ -126,7 +136,8 @@ int	main(int ac, char **av)
 
 	exit_status = run_philo(m); //runs the main logic loop
 
-	print_philos(m); //DEBUG
+	if (m->state != MSTATE_ERROR)
+		print_philos(m); //DEBUG
 
 	free_all(m);
 
