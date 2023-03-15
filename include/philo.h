@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:56:01 by llord             #+#    #+#             */
-/*   Updated: 2023/03/15 16:59:46 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/15 17:10:24 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ typedef struct s_meta
 // ======== FUNCTIONS ======== //
 
 //from acter
+int			think_n_check(t_philo *p);
 void		live(t_philo *p);
 
 //from checkers

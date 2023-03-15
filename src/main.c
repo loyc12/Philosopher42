@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 08:55:54 by llord             #+#    #+#             */
-/*   Updated: 2023/03/15 17:05:35 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/15 17:14:34 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,15 @@ void	*philosopher(void *_p)
 	p->last_meal = p->m->start_time;
 
 	//print_action(time_dif(p->m), p->philo_id, ACT_BORN); //DEBUG
+
+	pthread_mutex_lock(&(p->p_mutex));
+	if (p->m->philo_count == 1)
+	{
+		pthread_mutex_unlock(&(p->p_mutex));
+		if (think_n_check(p))
+			return (NULL);
+	}
+	pthread_mutex_unlock(&(p->p_mutex));
 
 	if ((p->philo_id % 2) == 1) //makes uneven wait
 	{
@@ -107,14 +116,16 @@ void	print_philos(t_meta *m) //DEBUG						REMOVE ME
 		if (p->state == PSTATE_DEAD)
 		{
 			death_flag = 1;
-			printf(" > !!! DEAD !!!");
+			printf("   !!! DEAD !!!");
 		}
 		printf("\n");
 	}
 	printf("\n");
 
 	if (death_flag)
-		printf("  Ran outta spagett, FOOL !!!\n\n");
+		printf("  Ran outta spagett, FOOL !!!\n");
+	else
+		printf("  Enlightenment achieved...\n");
 	printf("  Settings : %i %i %i %i (%i)\n\n", m->philo_count, m->time_death, m->time_eat, m->time_sleep, m->time_think);
 }
 

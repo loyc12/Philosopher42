@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 14:40:48 by vjean             #+#    #+#             */
-/*   Updated: 2023/03/15 17:01:21 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/15 17:10:25 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,26 +32,6 @@ int	eat_n_check(t_philo *p)
 	return (0);
 }
 
-//makes the philo think while checking for death. returns 1 if dead, 0 if successful
-int	think_n_check(t_philo *p)
-{
-	long long	time; //in ns
-
-	if (check_stop_flags(p))
-		return (1);
-
-	print_action(time_dif(p->m->start_time), p->philo_id, ACT_THINK);
-
-	time = get_time();
-	while (time_dif(time) < p->m->time_think)
-	{
-		if (check_stop_flags(p))
-			return (1);
-		usleep(SLEEP_T);
-	}
-	return (0);
-}
-
 //makes the philo sleep while checking for death. returns 1 if dead, 0 if successful
 int	sleep_n_check(t_philo *p)
 {
@@ -64,6 +44,26 @@ int	sleep_n_check(t_philo *p)
 
 	time = get_time();
 	while (time_dif(time) < p->m->time_sleep)
+	{
+		if (check_stop_flags(p))
+			return (1);
+		usleep(SLEEP_T);
+	}
+	return (0);
+}
+
+//makes the philo think while checking for death. returns 1 if dead, 0 if successful
+int	think_n_check(t_philo *p)
+{
+	long long	time; //in ns
+
+	if (check_stop_flags(p))
+		return (1);
+
+	print_action(time_dif(p->m->start_time), p->philo_id, ACT_THINK);
+
+	time = get_time();
+	while (time_dif(time) < p->m->time_think)
 	{
 		if (check_stop_flags(p))
 			return (1);
@@ -120,14 +120,6 @@ int	eat_w_forks(t_philo *p)
 
 void	live(t_philo *p)
 {
-	pthread_mutex_lock(&(p->p_mutex));
-	if (p->m->philo_count == 1)
-	{
-		pthread_mutex_unlock(&(p->p_mutex));
-		if (think_n_check(p))
-			return ;
-	}
-	pthread_mutex_unlock(&(p->p_mutex));
 	while (1)
 	{
 		if (eat_w_forks(p))
