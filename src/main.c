@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 08:55:54 by llord             #+#    #+#             */
-/*   Updated: 2023/03/16 11:08:44 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/16 13:21:55 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	start_threads(t_meta *m)
 	while (++i < m->philo_count)
 	{
 		p = m->philos[i];
-		if (pthread_create(m->p_threads[i], NULL, philosopher, m->philos[i]))
+		if (pthread_create(m->threads[i], NULL, philosopher, m->philos[i]))
 		{
 			throw_error(ERR_THREAD);
 			pthread_mutex_lock(&(m->m_mutex));
@@ -73,7 +73,8 @@ int	run_philo(t_meta *m)
 		pthread_mutex_unlock(&(m->m_mutex));
 		make_checks(m);
 	}
-	pthread_mutex_unlock(&(m->m_mutex));
+	else
+		pthread_mutex_unlock(&(m->m_mutex));
 	wait_threads(m);
 	if (m->state <= MSTATE_ERROR)
 		return (EXIT_FAILURE);
@@ -120,7 +121,7 @@ int	main(int ac, char **av)
 		return (throw_error(ERR_A_CNT));
 	m = ft_calloc(1, sizeof(t_meta));
 	if (init_meta(m, av))
-		return (throw_error(ERR_INIT));
+		return (free_null(ADRS m), throw_error(ERR_INIT));
 	exit_status = run_philo(m);
 	free_all(m);
 	return (exit_status);

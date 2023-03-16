@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 13:00:02 by llord             #+#    #+#             */
-/*   Updated: 2023/03/16 10:24:48 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/16 13:19:56 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,16 @@ void	free_all(t_meta *m)
 	i = -1;
 	while (++i < m->philo_count)
 	{
-		free_null(ADRS m->philos[i]);
-		free_null(ADRS m->forks[i]);
+		if (m->philos)
+			free_null(ADRS m->philos[i]);
+		if (m->forks)
+			free_null(ADRS m->forks[i]);
+		if (m->threads)
+			free_null(ADRS m->threads[i]);
 	}
+	free_null(ADRS m->philos);
+	free_null(ADRS m->forks);
+	free_null(ADRS m->threads);
 	free_null(ADRS m);
 }
 
@@ -55,7 +62,7 @@ void	wait_threads(t_meta *m)
 	i = -1;
 	while (++i < m->philo_count)
 	{
-		pthread_join(*m->p_threads[i], NULL);
+		pthread_join(*m->threads[i], NULL);
 	}
 }
 
@@ -70,4 +77,5 @@ void	kill_mutex(t_meta *m)
 		pthread_mutex_destroy(&(m->forks[i]->f_mutex));
 		pthread_mutex_destroy(&(m->philos[i]->p_mutex));
 	}
+	pthread_mutex_destroy(&(m->m_mutex));
 }

@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:56:01 by llord             #+#    #+#             */
-/*   Updated: 2023/03/16 10:28:24 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/16 13:22:30 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@
 # define ERR_THREAD	"Process Error : Thread failure"
 # define ERR_MUTEX	"Process Error : Mutex failure"
 
-# define ACT_BORN	"has been born"
 # define ACT_TAKE	"has taken a fork"
 # define ACT_EAT	"is eating"
 # define ACT_SLEEP	"is sleeping"
@@ -98,7 +97,7 @@ typedef struct s_meta
 	int				time_think;
 	int				meal_limit;
 
-	pthread_t		**p_threads;
+	pthread_t		**threads;
 
 	t_fork			**forks;
 	t_philo			**philos;
@@ -139,7 +138,7 @@ void	*ft_calloc(size_t count, size_t size);
 
 //from utilities
 int		throw_error(char *error);
-void	print_action(long long time, int philo_id, char *action);
+void	print_action(t_meta *m, long long time, int philo_id, char *action);
 int		philo_atoi(const char *str, int allow_zero);
 long	get_time_dif(long time);
 int		smart_sleep(t_philo *p, int e_time);

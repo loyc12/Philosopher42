@@ -47,11 +47,11 @@ else
 endif
 
 # Start screen mode
-export GRAPHIC = FALSE
-ifeq ($(GRAPHIC),TRUE)
-	START = bash filename.sh
+export XFLAG = FALSE
+ifeq ($(XFLAG),TRUE)
+	EXTRA_FLAGS = -fsanitize=thread
 else
-	START =
+	EXTRA_FLAGS =
 endif
 
 #------------------------------------------------------------------------------#
@@ -60,7 +60,7 @@ endif
 
 # Compiler and flags
 CC		=	gcc
-CFLAGS	=	-Wall -Werror -Wextra -fsanitize=thread
+CFLAGS	=	-Wall -Werror -Wextra $(EXTRA_FLAGS)
 RM		=	rm -rf
 MD		=	mkdir -p
 INCLUDE =	-I include
@@ -189,7 +189,7 @@ test3:
 	./philo 3 060 200 200 8
 	./philo 3 060 060 060 8
 
-test200:
+test200: re
 	./philo 200 500 200 200 8
 	./philo 200 500 060 200 8
 	./philo 200 500 200 060 8

@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 14:40:48 by vjean             #+#    #+#             */
-/*   Updated: 2023/03/16 10:27:58 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/16 13:22:05 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,12 @@ int	throw_error(char *error)
 }
 
 //prints a given action (from DEFINE)
-void	print_action(long long time, int philo_id, char *action)
+void	print_action(t_meta *m, long long time, int philo_id, char *action)
 {
-	printf("%lli : #%i %s\n", time, philo_id, action);
+	pthread_mutex_lock(&(m->m_mutex));
+	if (m->state != MSTATE_ENDING)
+		printf("%lli : #%i %s\n", time, philo_id, action);
+	pthread_mutex_unlock(&(m->m_mutex));
 }
 
 //converts a string into an interger

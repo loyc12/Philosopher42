@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 14:40:48 by vjean             #+#    #+#             */
-/*   Updated: 2023/03/16 10:24:16 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/16 13:19:39 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,11 @@ void	init_philos(t_meta *m)
 
 	i = -1;
 	m->philos = ft_calloc(m->philo_count, sizeof(t_philo *));
-	m->p_threads = ft_calloc(m->philo_count, sizeof(pthread_t *));
+	m->threads = ft_calloc(m->philo_count, sizeof(pthread_t *));
 	while (++i < m->philo_count)
 	{
 		m->philos[i] = ft_calloc(1, sizeof(t_philo));
-		m->p_threads[i] = ft_calloc(m->philo_count, sizeof(pthread_t));
+		m->threads[i] = ft_calloc(m->philo_count, sizeof(pthread_t));
 		p = m->philos[i];
 		p->m = m;
 		p->philo_id = i + 1;
