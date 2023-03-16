@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 08:55:54 by llord             #+#    #+#             */
-/*   Updated: 2023/03/16 11:08:10 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/16 11:08:44 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,6 @@ void	*ft_calloc(size_t count, size_t size)
 //	(odd and even) are not eating, compensating for the lag
 //		for example; 199 310 100 100
 //	where; (death_time ~= (philo_number * 0.1) + (3 * eat_time))
-
 
 //entrypoint function
 int	main(int ac, char **av)
