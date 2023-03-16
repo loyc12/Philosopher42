@@ -24,7 +24,7 @@ WHITE	= \033[0;97m
 # Special variables
 DEFAULT_GOAL: all
 .DELETE_ON_ERROR: $(NAME)
-.PHONY: all ldirs bonus clean fclean clear fclear re run rerun leaks releaks display test1 test2 test3 test
+.PHONY: all ldirs bonus clean fclean clear fclear re run rerun leaks releaks display test1 test2 test3 test200
 
 #------------------------------------------------------------------------------#
 #                                    FLAGS                                     #
@@ -47,11 +47,11 @@ else
 endif
 
 # Start screen mode
-export GRAPHIC = FALSE
-ifeq ($(GRAPHIC),TRUE)
-	START = bash filename.sh
+export XFLAG = FALSE
+ifeq ($(XFLAG),TRUE)
+	EXTRA_FLAGS = -fsanitize=thread
 else
-	START =
+	EXTRA_FLAGS =
 endif
 
 #------------------------------------------------------------------------------#
@@ -60,7 +60,7 @@ endif
 
 # Compiler and flags
 CC		=	gcc
-CFLAGS	=	-Wall -Werror -Wextra -fsanitize=thread
+CFLAGS	=	-Wall -Werror -Wextra $(EXTRA_FLAGS)
 RM		=	rm -rf
 MD		=	mkdir -p
 INCLUDE =	-I include
@@ -174,7 +174,7 @@ test3: re
 	./philo 3 060 200 200 8
 	./philo 3 060 060 060 8
 
-test: re
+test200: re
 	./philo 200 500 200 200 8
 	./philo 200 500 060 200 8
 	./philo 200 500 200 060 8

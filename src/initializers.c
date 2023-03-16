@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 14:40:48 by vjean             #+#    #+#             */
-/*   Updated: 2023/03/16 12:31:32 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/16 13:09:21 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,11 @@ void	init_philos(t_meta *m)
 
 	i = -1;
 	m->philos = calloc(m->philo_count, sizeof(t_philo *));
-	m->p_threads = calloc(m->philo_count, sizeof(pthread_t *));
+	m->threads = calloc(m->philo_count, sizeof(pthread_t *));
 	while (++i < m->philo_count)
 	{
 		m->philos[i] = calloc(1, sizeof(t_philo));
-		m->p_threads[i] = calloc(m->philo_count, sizeof(pthread_t));
+		m->threads[i] = calloc(m->philo_count, sizeof(pthread_t));
 		p = m->philos[i];
 		p->m = m;
 		p->philo_id = i + 1; //+1 cause no 0
@@ -72,8 +72,7 @@ void	init_mutexes(t_meta *m)
 			return ;
 		}
 	}
-	if (pthread_mutex_init(&(m->m_mutex), NULL)
-		|| pthread_mutex_init(&(m->o_mutex), NULL))
+	if (pthread_mutex_init(&(m->m_mutex), NULL))
 	{
 		throw_error(ERR_MUTEX);
 		m->state = MSTATE_ERROR;

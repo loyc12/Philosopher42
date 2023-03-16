@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 08:55:54 by llord             #+#    #+#             */
-/*   Updated: 2023/03/16 12:35:15 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/16 13:15:24 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,6 @@ void	*philosopher(void *_p)
 	p = (t_philo *)_p;
 
 	p->last_meal = p->m->start_time;
-
-	//print_action(p->m, get_time_dif(p->m), p->philo_id, ACT_BORN); //DEBUG
 
 	pthread_mutex_lock(&(p->p_mutex));
 	if (p->m->philo_count == 1)
@@ -60,7 +58,7 @@ void	start_threads(t_meta *m)
 	while (++i < m->philo_count)
 	{
 		p = m->philos[i];
-		if (pthread_create(m->p_threads[i], NULL, philosopher, m->philos[i]))
+		if (pthread_create(m->threads[i], NULL, philosopher, m->philos[i]))
 		{
 			throw_error(ERR_THREAD);
 			pthread_mutex_lock(&(m->m_mutex));
@@ -87,15 +85,14 @@ int	run_philo(t_meta *m)
 		pthread_mutex_unlock(&(m->m_mutex));
 		make_checks(m);
 	}
-	pthread_mutex_unlock(&(m->m_mutex));
-
+	else
+		pthread_mutex_unlock(&(m->m_mutex));
 	wait_threads(m);
 
 	//printf("> Run_philo completed\n"); //DEBUG
 
-	if (m->state <= MSTATE_ERROR) //only fail if the threading failed
+	if (m->state <= MSTATE_ERROR)
 		return (EXIT_FAILURE);
-
 	return (EXIT_SUCCESS);
 }
 
@@ -107,9 +104,11 @@ void	print_philos(t_meta *m) //DEBUG						REMOVE ME
 
 	i = -1;
 	death_flag = 0;
+	pthread_mutex_lock(&(m->m_mutex));
 	while (++i < m->philo_count)
 	{
 		p = m->philos[i];
+		pthread_mutex_lock(&(p->p_mutex));
 		printf("\n#%i :", p->philo_id);
 		printf(" Ate %i", p->meal_count);
 		if (p->state == PSTATE_DEAD)
@@ -117,7 +116,9 @@ void	print_philos(t_meta *m) //DEBUG						REMOVE ME
 			death_flag = 1;
 			printf("   !!! DEAD !!!");
 		}
+		pthread_mutex_unlock(&(p->p_mutex));
 	}
+	pthread_mutex_unlock(&(m->m_mutex));
 	printf("\n\n");
 
 	if (death_flag)
@@ -139,7 +140,7 @@ int	main(int ac, char **av)
 
 	m = calloc(1, sizeof(t_meta)); //CHAGNE TO FT_CALLOC !!!!!!
 	if (init_meta(m, av)) //initilizes t_meta and all its sub structs/things
-		return (throw_error(ERR_INIT));
+		return (free_null(ADRS m), throw_error(ERR_INIT));
 
 	//printf("> Init_meta completed\n"); //DEBUG
 

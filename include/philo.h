@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:56:01 by llord             #+#    #+#             */
-/*   Updated: 2023/03/16 12:36:07 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/16 13:10:50 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@
 # define ERR_THREAD	"Process Error : Thread failure"
 # define ERR_MUTEX	"Process Error : Mutex failure"
 
-# define ACT_BORN	"has been born"
 # define ACT_TAKE	"has taken a fork"
 # define ACT_EAT	"is eating"
 # define ACT_SLEEP	"is sleeping"
@@ -98,7 +97,7 @@ typedef struct s_meta
 	int				time_think;		//in ms
 	int				meal_limit;		//optional argument, ends program when reached by all philosophers
 
-	pthread_t		**p_threads;
+	pthread_t		**threads;
 
 	t_fork			**forks;
 	t_philo			**philos;
