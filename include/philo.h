@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:56:01 by llord             #+#    #+#             */
-/*   Updated: 2023/03/15 17:10:24 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/16 09:54:12 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,8 +124,6 @@ void		find_time_think(t_meta *m);
 void		init_forks(t_meta *m);
 void		init_philos(t_meta *m);
 int			init_meta(t_meta *m, char **av);
-long long	get_time(void);
-int			time_dif(long long time);
 
 //from killers
 void		free_null(void **ptr);
@@ -141,6 +139,8 @@ void		start_threads(t_meta *m);
 //from utilities
 int			throw_error(char *error);
 void		print_action(long long time, int philo_id, char *action);
-int			ft_atoi(const char *str);
+int			philo_atoi(const char *str, int allow_zero);
+long long	get_time_dif(long long time);
+int			smart_sleep(t_philo *p, int e_time);
 
 #endif

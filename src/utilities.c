@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 14:40:48 by vjean             #+#    #+#             */
-/*   Updated: 2023/03/15 14:16:26 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/16 09:53:56 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	print_action(long long time, int philo_id, char *action)
 }
 
 //converts a string into an interger
-int	ft_atoi(const char *str)
+int	philo_atoi(const char *str, int allow_zero)
 {
 	int		i;
 	int		number; //swap to long for bigger intervals?
@@ -44,25 +44,41 @@ int	ft_atoi(const char *str)
 		number = (number * 10) + (str[i++] - '0');
 
 	//printf("> Inputed value : %i\n", number); //DEBUG
-
-	if (!str[i] && number > 0)
-		return (number);
+	if (!str[i])
+	{
+		if (number > 0)
+			return (number);
+		else if (allow_zero && number == 0)
+			return (number);
+	}
 	throw_error(ERR_A_VAL);
 	return (-1);
 }
 
-//gives the current time in ms
-long long	get_time(void)
+//returns how long ago a specified time was (in ms)
+long long	get_time_dif(long long then)
 {
 	struct timeval	t;
+	int				now;
 
 	gettimeofday(&t, NULL);
 
-	return ((t.tv_sec * 1000) + (t.tv_usec / 1000)); //returns time in ms
+	now = (t.tv_sec * 1000) + (t.tv_usec / 1000); //current time in ms
+
+	return (now - then);
 }
 
-//returns how long ago a specified time was (in ms)
-int	time_dif(long long time)
+//sleeps while checking for an end condition
+int	smart_sleep(t_philo *p, int e_time)
 {
-	return ((int)(get_time() - time)); //returns time dif in ms
+	int	b_time; //in ns
+
+	b_time = get_time_dif(0);
+	while (get_time_dif(b_time) < e_time)
+	{
+		if (check_stop_flags(p))
+			return (1);
+		usleep(SLEEP_T);
+	}
+	return (0);
 }

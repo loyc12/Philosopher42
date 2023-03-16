@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 08:55:54 by llord             #+#    #+#             */
-/*   Updated: 2023/03/15 17:14:34 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/16 10:02:46 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,13 @@
 void	*philosopher(void *_p)
 {
 	t_philo	*p;
-	long	delay;
+	int	delay;
 
 	p = (t_philo *)_p;
 
 	p->last_meal = p->m->start_time;
 
-	//print_action(time_dif(p->m), p->philo_id, ACT_BORN); //DEBUG
+	//print_action(get_time_dif(p->m), p->philo_id, ACT_BORN); //DEBUG
 
 	pthread_mutex_lock(&(p->p_mutex));
 	if (p->m->philo_count == 1)
@@ -54,7 +54,7 @@ void	start_threads(t_meta *m)
 	//printf("> Init_threads started\n"); //DEBUG
 
 	m->state = MSTATE_RUNING;
-	m->start_time = get_time();
+	m->start_time = (int)get_time_dif(0);
 
 	i = -1;
 	while (++i < m->philo_count)
@@ -107,20 +107,18 @@ void	print_philos(t_meta *m) //DEBUG						REMOVE ME
 
 	i = -1;
 	death_flag = 0;
-	printf("\n");
 	while (++i < m->philo_count)
 	{
 		p = m->philos[i];
-		printf("#%i :", p->philo_id);
+		printf("\n#%i :", p->philo_id);
 		printf(" Ate %i", p->meal_count);
 		if (p->state == PSTATE_DEAD)
 		{
 			death_flag = 1;
 			printf("   !!! DEAD !!!");
 		}
-		printf("\n");
 	}
-	printf("\n");
+	printf("\n\n");
 
 	if (death_flag)
 		printf("  Ran outta spagett, FOOL !!!\n");

@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 14:40:48 by vjean             #+#    #+#             */
-/*   Updated: 2023/03/15 16:32:47 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/16 09:55:40 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,13 +85,13 @@ void	init_mutexes(t_meta *m)
 //sets the constants for t_meta
 void	set_consts(t_meta *m, char **av)
 {
-	m->philo_count = ft_atoi(av[1]);
-	m->time_death = ft_atoi(av[2]);
-	m->time_eat = ft_atoi(av[3]);
-	m->time_sleep = ft_atoi(av[4]);
+	m->philo_count = philo_atoi(av[1], 1);
+	m->time_death = philo_atoi(av[2], 0);
+	m->time_eat = philo_atoi(av[3], 0);
+	m->time_sleep = philo_atoi(av[4], 0);
 
 	if (av[5])
-		m->meal_limit = ft_atoi(av[5]);
+		m->meal_limit = philo_atoi(av[5], 0);
 	else
 		m->meal_limit = 0;
 
