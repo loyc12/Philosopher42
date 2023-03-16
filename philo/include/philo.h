@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:56:01 by llord             #+#    #+#             */
-/*   Updated: 2023/03/16 09:54:12 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/16 12:36:07 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ typedef struct s_meta
 	long long		start_time;		//in ms
 
 	pthread_mutex_t	m_mutex;		//mutex for meta's state
+	pthread_mutex_t	o_mutex;		//mutex for outputing to terminal
 	int				state;
 }					t_meta;
 
@@ -138,7 +139,7 @@ void		start_threads(t_meta *m);
 
 //from utilities
 int			throw_error(char *error);
-void		print_action(long long time, int philo_id, char *action);
+void		print_action(t_meta *m, long long time, int philo_id, char *action);
 int			philo_atoi(const char *str, int allow_zero);
 long long	get_time_dif(long long time);
 int			smart_sleep(t_philo *p, int e_time);

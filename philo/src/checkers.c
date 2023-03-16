@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 13:41:48 by llord             #+#    #+#             */
-/*   Updated: 2023/03/16 09:33:35 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/16 12:35:09 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	check_stop_flags(t_philo *p)
 	pthread_mutex_unlock(&(p->m->m_mutex));
 	if ((int)get_time_dif(p->last_meal) >= p->m->time_death) //checks for death during sleep
 	{
-		print_action(get_time_dif(p->m->start_time), p->philo_id, ACT_DIE);
+		print_action(p->m, get_time_dif(p->m->start_time), p->philo_id, ACT_DIE);
 
 		pthread_mutex_lock(&(p->p_mutex));
 		p->state = PSTATE_DEAD;

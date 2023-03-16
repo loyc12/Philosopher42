@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 08:55:54 by llord             #+#    #+#             */
-/*   Updated: 2023/03/16 10:02:46 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/16 12:35:15 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	*philosopher(void *_p)
 
 	p->last_meal = p->m->start_time;
 
-	//print_action(get_time_dif(p->m), p->philo_id, ACT_BORN); //DEBUG
+	//print_action(p->m, get_time_dif(p->m), p->philo_id, ACT_BORN); //DEBUG
 
 	pthread_mutex_lock(&(p->p_mutex));
 	if (p->m->philo_count == 1)

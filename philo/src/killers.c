@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 13:00:02 by llord             #+#    #+#             */
-/*   Updated: 2023/03/09 15:08:56 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/16 12:32:27 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ void	kill_mutex(t_meta *m)
 		pthread_mutex_destroy(&(m->forks[i]->f_mutex));
 		pthread_mutex_destroy(&(m->philos[i]->p_mutex));
 	}
+	pthread_mutex_destroy(&(m->m_mutex));
+	pthread_mutex_destroy(&(m->o_mutex));
 
 	//printf("> Killed all mutexes\n"); //DEBUG
 }

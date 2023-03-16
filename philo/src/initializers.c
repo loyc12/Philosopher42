@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 14:40:48 by vjean             #+#    #+#             */
-/*   Updated: 2023/03/16 09:55:40 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/16 12:31:32 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,8 @@ void	init_mutexes(t_meta *m)
 			return ;
 		}
 	}
-	if (pthread_mutex_init(&(m->m_mutex), NULL))
+	if (pthread_mutex_init(&(m->m_mutex), NULL)
+		|| pthread_mutex_init(&(m->o_mutex), NULL))
 	{
 		throw_error(ERR_MUTEX);
 		m->state = MSTATE_ERROR;
