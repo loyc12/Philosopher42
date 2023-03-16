@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 14:40:48 by vjean             #+#    #+#             */
-/*   Updated: 2023/03/16 13:23:37 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/16 13:25:21 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	eat_w_forks(t_philo *p)
 	pthread_mutex_lock(&(p->left_fork->f_mutex));
 	if (check_stop_flags(p))
 		return (pthread_mutex_unlock(&(p->left_fork->f_mutex)), 1);
-	print_action(get_time_dif(p->m->start_time), p->philo_id, ACT_TAKE);
+	print_action(p->m, get_time_dif(p->m->start_time), p->philo_id, ACT_TAKE);
 	pthread_mutex_lock(&(p->right_fork->f_mutex));
 	if (check_stop_flags(p))
 	{

@@ -87,7 +87,7 @@ SRCS	=	$(addprefix $(SRCDIR), $(addsuffix .c, $(FILES)))
 OBJS	=	$(addprefix $(OBJDIR), $(addsuffix .o, $(FILES)))
 
 # Default command to call when using make run or make leaks
-CMD		=	./philo 200 500 200 200 8
+CMD		=	./philo 200 520 200 200 8
 #------------------------------------------------------------------------------#
 #                                   TARGETS                                    #
 #------------------------------------------------------------------------------#

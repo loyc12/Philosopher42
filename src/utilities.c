@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 14:40:48 by vjean             #+#    #+#             */
-/*   Updated: 2023/03/16 13:22:05 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/16 13:33:49 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,14 @@ int	throw_error(char *error)
 	return (EXIT_FAILURE);
 }
 
-//prints a given action (from DEFINE)
+//prints a given action, and if the action is dying, ends the simulation
 void	print_action(t_meta *m, long long time, int philo_id, char *action)
 {
 	pthread_mutex_lock(&(m->m_mutex));
 	if (m->state != MSTATE_ENDING)
 		printf("%lli : #%i %s\n", time, philo_id, action);
+	if (action[0] == 'd')
+		m->state = MSTATE_ENDING;
 	pthread_mutex_unlock(&(m->m_mutex));
 }
 
