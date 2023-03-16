@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:56:01 by llord             #+#    #+#             */
-/*   Updated: 2023/03/16 09:54:12 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/16 10:28:24 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@
 # define ADRS		(void **)&
 # define ADRS2		(void ***)&
 
-# define BORN_T		(int)5 //(in usec) interval during philosopher creation
-# define SLEEP_T	(int)1000 //(in usec) interval during death checks when doing action
+# define BORN_T		(int)5 //(in usec) interval between thread starts
+# define SLEEP_T	(int)1000 //(in usec) smart sleep interval
 # define PHILO_M	(int)200 //max number of philosophers
 
 // ======== ENUM STATES ======== //
@@ -71,7 +71,7 @@ typedef struct s_fork
 	int				fork_id;
 	int				user_id;
 
-	pthread_mutex_t	f_mutex;		//mutext for fork usage
+	pthread_mutex_t	f_mutex;
 }					t_fork;
 
 typedef struct s_philo
@@ -84,7 +84,7 @@ typedef struct s_philo
 	int				meal_count;
 	int				philo_id;
 
-	pthread_mutex_t	p_mutex;		//mutex for philo's meal_count and state
+	pthread_mutex_t	p_mutex;
 	int				state;
 
 }			t_philo;
@@ -92,55 +92,56 @@ typedef struct s_philo
 typedef struct s_meta
 {
 	int				philo_count;
-	int				time_death;		//in ms
-	int				time_eat;		//in ms
-	int				time_sleep;		//in ms
-	int				time_think;		//in ms
-	int				meal_limit;		//optional argument, ends program when reached by all philosophers
+	int				time_death;
+	int				time_eat;
+	int				time_sleep;
+	int				time_think;
+	int				meal_limit;
 
 	pthread_t		**p_threads;
 
 	t_fork			**forks;
 	t_philo			**philos;
 
-	long long		start_time;		//in ms
+	long long		start_time;
 
-	pthread_mutex_t	m_mutex;		//mutex for meta's state
+	pthread_mutex_t	m_mutex;
 	int				state;
 }					t_meta;
 
 // ======== FUNCTIONS ======== //
 
 //from acter
-int			think_n_check(t_philo *p);
-void		live(t_philo *p);
+int		think_n_check(t_philo *p);
+void	live(t_philo *p);
 
 //from checkers
-void		make_checks(t_meta *m);
-int			check_stop_flags(t_philo *p);
-void		find_time_think(t_meta *m);
+void	make_checks(t_meta *m);
+int		check_stop_flags(t_philo *p);
+void	find_time_think(t_meta *m);
 
 //from initializers
-void		init_forks(t_meta *m);
-void		init_philos(t_meta *m);
-int			init_meta(t_meta *m, char **av);
+void	init_forks(t_meta *m);
+void	init_philos(t_meta *m);
+int		init_meta(t_meta *m, char **av);
 
 //from killers
-void		free_null(void **ptr);
-void		free_array(void ***ptr);
-void		free_all(t_meta *m);
-void		wait_threads(t_meta *m);
-void		kill_mutex(t_meta *m);
+void	free_null(void **ptr);
+void	free_array(void ***ptr);
+void	free_all(t_meta *m);
+void	wait_threads(t_meta *m);
+void	kill_mutex(t_meta *m);
 
 //from main
-void		*philosopher(void *void_philo);
-void		start_threads(t_meta *m);
+void	*philosopher(void *void_philo);
+void	start_threads(t_meta *m);
+void	*ft_calloc(size_t count, size_t size);
 
 //from utilities
-int			throw_error(char *error);
-void		print_action(long long time, int philo_id, char *action);
-int			philo_atoi(const char *str, int allow_zero);
-long long	get_time_dif(long long time);
-int			smart_sleep(t_philo *p, int e_time);
+int		throw_error(char *error);
+void	print_action(long long time, int philo_id, char *action);
+int		philo_atoi(const char *str, int allow_zero);
+long	get_time_dif(long time);
+int		smart_sleep(t_philo *p, int e_time);
 
 #endif

@@ -6,13 +6,13 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 13:41:48 by llord             #+#    #+#             */
-/*   Updated: 2023/03/16 09:33:35 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/16 10:20:20 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-//locks every philo's p_mutex and checks their status. return 1 if one is dead
+//locks every philo's p_mutex and checks their status
 int	check_death(t_meta *m)
 {
 	int	i;
@@ -23,7 +23,6 @@ int	check_death(t_meta *m)
 		pthread_mutex_lock(&(m->philos[i]->p_mutex));
 		if (m->philos[i]->state == PSTATE_DEAD)
 		{
-			//printf("> Death detected\n"); //DEBUG
 			pthread_mutex_unlock(&(m->philos[i]->p_mutex));
 			return (1);
 		}
@@ -32,7 +31,7 @@ int	check_death(t_meta *m)
 	return (0);
 }
 
-//locks every philo's p_mutex and checks their meal count. return 0 if one is bellow limit
+//locks every philo's p_mutex and checks their meal count
 int	check_meal_count(t_meta *m)
 {
 	int	i;
@@ -48,7 +47,6 @@ int	check_meal_count(t_meta *m)
 		}
 		pthread_mutex_unlock(&(m->philos[i]->p_mutex));
 	}
-	//printf("> Meal count reached\n"); //DEBUG
 	return (1);
 }
 
@@ -73,20 +71,18 @@ void	make_checks(t_meta *m)
 int	check_stop_flags(t_philo *p)
 {
 	pthread_mutex_lock(&(p->m->m_mutex));
-	if (p->m->state == MSTATE_ENDING) //checks for ending flag during sleep
+	if (p->m->state == MSTATE_ENDING)
 	{
 		pthread_mutex_unlock(&(p->m->m_mutex));
 		return (1);
 	}
 	pthread_mutex_unlock(&(p->m->m_mutex));
-	if ((int)get_time_dif(p->last_meal) >= p->m->time_death) //checks for death during sleep
+	if ((int)get_time_dif(p->last_meal) >= p->m->time_death)
 	{
 		print_action(get_time_dif(p->m->start_time), p->philo_id, ACT_DIE);
-
 		pthread_mutex_lock(&(p->p_mutex));
 		p->state = PSTATE_DEAD;
 		pthread_mutex_unlock(&(p->p_mutex));
-
 		return (1);
 	}
 	return (0);
@@ -109,17 +105,17 @@ void	find_time_think(t_meta *m)
 {
 	int	buffer_time;
 
-	if (m->philo_count == 1) //solo case
+	if (m->philo_count == 1)
 	{
 		m->time_think = 2 * m->time_death;
 		buffer_time = 0;
 	}
-	else if (m->philo_count % 2 == 0) //even case
+	else if (m->philo_count % 2 == 0)
 	{
 		m->time_think = m->time_eat - m->time_sleep;
 		buffer_time = (m->time_death - ((2 * m->time_eat) + m->time_sleep)) / 2;
 	}
-	else //uneven case
+	else
 	{
 		m->time_think = (2 * m->time_eat) - m->time_sleep;
 		buffer_time = (m->time_death - ((3 * m->time_eat) + m->time_sleep)) / 2;
@@ -128,6 +124,4 @@ void	find_time_think(t_meta *m)
 		m->time_think = 0;
 	if (m->time_think < buffer_time)
 		m->time_think = buffer_time;
-
-	//printf("> Time_think value : %i\n", m->time_think); //DEBUG
 }

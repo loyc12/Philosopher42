@@ -24,7 +24,7 @@ WHITE	= \033[0;97m
 # Special variables
 DEFAULT_GOAL: all
 .DELETE_ON_ERROR: $(NAME)
-.PHONY: all ldirs bonus clean fclean clear fclear re run rerun leaks releaks display test1 test2 test3 test
+.PHONY: all ldirs bonus clean fclean clear fclear re run rerun leaks releaks display testerror test1 test2 test3 test200
 
 #------------------------------------------------------------------------------#
 #                                    FLAGS                                     #
@@ -141,7 +141,22 @@ leaks: all
 display:
 	$(HIDE) $(START)
 
-test1: re
+testerror:
+	./philo 201 500 200 200 8
+
+	./philo 00 500 200 2000 8
+	./philo 02 000 200 200 08
+	./philo 02 200 000 200 08
+	./philo 02 200 200 000 08
+	./philo 02 200 200 200 00
+
+	./philo -1 500 200 200 08
+	./philo 02 -01 200 200 08
+	./philo 02 200 -01 200 08
+	./philo 02 200 200 -01 08
+	./philo 02 200 200 200 -1
+
+test1:
 	./philo 1 210 200 200 8
 	./philo 1 210 060 200 8
 	./philo 1 210 200 060 8
@@ -152,7 +167,7 @@ test1: re
 	./philo 1 060 200 200 8
 	./philo 1 060 060 060 8
 
-test2: re
+test2:
 	./philo 2 410 200 200 8
 	./philo 2 410 060 200 8
 	./philo 2 410 200 060 8
@@ -163,7 +178,7 @@ test2: re
 	./philo 2 060 200 200 8
 	./philo 2 060 060 060 8
 
-test3: re
+test3:
 	./philo 3 610 200 200 8
 	./philo 3 610 060 200 8
 	./philo 3 610 200 060 8
@@ -174,7 +189,7 @@ test3: re
 	./philo 3 060 200 200 8
 	./philo 3 060 060 060 8
 
-test: re
+test200:
 	./philo 200 500 200 200 8
 	./philo 200 500 060 200 8
 	./philo 200 500 200 060 8
@@ -184,3 +199,5 @@ test: re
 
 	./philo 200 060 200 200 8
 	./philo 200 060 060 060 8
+
+testall: re test200 test3 test2 test1 testerror

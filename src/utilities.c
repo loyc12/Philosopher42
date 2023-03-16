@@ -6,7 +6,7 @@
 /*   By: llord <llord@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/12 14:40:48 by vjean             #+#    #+#             */
-/*   Updated: 2023/03/16 09:53:56 by llord            ###   ########.fr       */
+/*   Updated: 2023/03/16 10:27:58 by llord            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,43 +35,38 @@ void	print_action(long long time, int philo_id, char *action)
 int	philo_atoi(const char *str, int allow_zero)
 {
 	int		i;
-	int		number; //swap to long for bigger intervals?
+	int		n;
 
 	i = 0;
-	number = 0;
-
+	n = 0;
 	while ('0' <= str[i] && str[i] <= '9')
-		number = (number * 10) + (str[i++] - '0');
-
-	//printf("> Inputed value : %i\n", number); //DEBUG
+		n = (n * 10) + (str[i++] - '0');
 	if (!str[i])
 	{
-		if (number > 0)
-			return (number);
-		else if (allow_zero && number == 0)
-			return (number);
+		if (n > 0)
+			return (n);
+		else if (allow_zero && n == 0)
+			return (n);
 	}
 	throw_error(ERR_A_VAL);
 	return (-1);
 }
 
 //returns how long ago a specified time was (in ms)
-long long	get_time_dif(long long then)
+long	get_time_dif(long then)
 {
 	struct timeval	t;
 	int				now;
 
 	gettimeofday(&t, NULL);
-
-	now = (t.tv_sec * 1000) + (t.tv_usec / 1000); //current time in ms
-
+	now = (t.tv_sec * 1000) + (t.tv_usec / 1000);
 	return (now - then);
 }
 
 //sleeps while checking for an end condition
 int	smart_sleep(t_philo *p, int e_time)
 {
-	int	b_time; //in ns
+	int	b_time;
 
 	b_time = get_time_dif(0);
 	while (get_time_dif(b_time) < e_time)
