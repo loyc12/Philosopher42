@@ -30,29 +30,12 @@ DEFAULT_GOAL: all
 #                                    FLAGS                                     #
 #------------------------------------------------------------------------------#
 
-# Hide calls
-export VERBOSE = FALSE
-ifeq ($(VERBOSE),TRUE)
-	HIDE =
-else
-	HIDE = @
-endif
+# Set to @ to disable enable echoing cmd calls:
+HIDE = @
 
-# Debug mode
-export DEBUG = FALSE
-ifeq ($(DEBUG),TRUE)
-	MODE = -g
-else
-	MODE =
-endif
-
-# Start screen mode
-export XFLAG = FALSE
-ifeq ($(XFLAG),TRUE)
-	EXTRA_FLAGS = -fsanitize=thread
-else
-	EXTRA_FLAGS =
-endif
+# Use "XFLAGS=..." to set extra compilation flags, such as:
+# -g					for debug mode
+# -fsanitize=thread		to see race conditions
 
 #------------------------------------------------------------------------------#
 #                                  VARIABLES                                   #
@@ -60,7 +43,7 @@ endif
 
 # Compiler and flags
 CC		=	gcc
-CFLAGS	=	-Wall -Werror -Wextra $(EXTRA_FLAGS)
+CFLAGS	=	-Wall -Werror -Wextra $(XFLAGS)
 RM		=	rm -rf
 MD		=	mkdir -p
 INCLUDE =	-I include
