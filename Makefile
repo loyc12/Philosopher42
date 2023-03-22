@@ -33,7 +33,7 @@ DEFAULT_GOAL: all
 # Set to @ to disable enable echoing cmd calls:
 HIDE = @
 
-# Use "XFLAGS=..." to set extra compilation flags, such as:
+# Use "export XFLAS=..." to set extra compilation flags, such as:
 # -g					for debug mode
 # -fsanitize=thread		to see race conditions
 
@@ -84,7 +84,7 @@ ldirs:
 $(NAME): $(OBJS)
 	$(HIDE) $(START)
 	$(HIDE) $(CC) $(MODE) $(CFLAGS) $(INCLUDE) $(LIBFT) -o $@ $^ $(LIBRL)
-	@echo "$(GREEN)Files compiled$(DEF_COLOR)"
+	@echo "$(GREEN)Files compiled with flags $(BLUE)$(CFLAGS)$(DEF_COLOR)"
 
 $(OBJS): $(OBJDIR)%.o : $(SRCDIR)%.c
 	@echo "$(YELLOW)Compiling: $< $(DEF_COLOR)"
